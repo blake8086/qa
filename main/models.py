@@ -15,6 +15,7 @@ class Question(models.Model):
 	deleted = models.BooleanField(default = False)
 	is_answered = models.BooleanField(default = False)
 	modified = models.DateTimeField(auto_now = True)
+	published = models.BooleanField(default = False)
 	price = models.DecimalField(max_digits = 6, decimal_places = 2)
 	text = models.TextField()
 	user = models.ForeignKey(User)

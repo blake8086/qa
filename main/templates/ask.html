@@ -1,26 +1,7 @@
 <title>Ask a Question</title>
-<form action="/payment">
-	My question:<br>
-	<textarea rows="12" cols="80"></textarea><br>
-	<hr>
-	<b>When my question is answered, notify me at:</b><br>
-	<label for="email">Email: </label><input type="text" name="email"><br>
-	<label for="email2">Confirm email: </label><input type="text" name="email2"><br>
-	<hr>
-	Bounty for a correct answer: 
-	<select>
-		<option>$ 2</option>
-		<option>$ 3</option>
-		<option>$ 5</option>
-		<option selected="selected">$ 10</option>
-		<option>$ 15</option>
-		<option>$ 20</option>
-		<option>$ 25</option>
-		<option>$ 30</option>
-		<option>$ 40</option>
-		<option>$ 50</option>
-		<option>$ 100</option>
-	</select><br>
+<form method="POST">
+{{ form.as_p }}
 	By clicking on 'I agree' below you are agreeing to the <a href="/tos">Terms of Service</a>.<br>
 	<input type="submit" value="I agree. Post my question" />
+	{% csrf_token %}
 </form>

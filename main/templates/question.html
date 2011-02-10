@@ -1,3 +1,4 @@
+{% load markup %}
 <title>QA: {{question.text|truncatewords:5}}</title>
 <a href="/">Home</a><br>
 <br>
@@ -5,17 +6,17 @@ ${{question.price}}<br>
 <br>
 {{question.user.email}}:<br>
 <br>
-{{question.text}}<br>
+{{question.text|markdown}}<br>
 <br>
 Answers:
 {% for answer in answers %}
 	<hr>
 	<button>Mark this answer as correct</button><br>
 	{{answer.user.email}}:<br>
-	{{answer.text}}<br>
+	{{answer.text|markdown}}<br>
 {% endfor %}
 <hr>
-<form action="/question">
+<form action="/payment">
 	<textarea rows="12" cols="80">Type your answer here</textarea><br>
 	<label for="email">email:</label><input type="text" name="email"><br>
 	<label for="email">confirm email:</label><input type="text" name="email2"><br>
@@ -23,4 +24,3 @@ Answers:
 	By clicking on 'I agree' below you are agreeing to the <a href="/tos">Terms of Service</a>.<br>
 	<input type="submit" value="I agree. Post my answer."/>
 </form>
-

@@ -8,7 +8,6 @@ urlpatterns = patterns('',
     (r'^ask$', 'main.views.ask'),
     (r'^question/(?P<question_id>\d+)$', 'main.views.question'),
     (r'^questions$', 'main.views.questions'),
-    (r'^payment$', 'main.views.payment'),
     (r'^tos$', 'main.views.tos'),
     (r'^', 'main.views.index'),
 )
