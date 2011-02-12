@@ -4,7 +4,7 @@
 	{% for question in questions %}
 		<li>
 			<h3>${{question.price}} <a href="/question/{{question.id}}">{{question.text|truncatewords:5}}</a></h1>
-			{{question.text|markdown}}<br>
+			{{question.text|markdown}}
 			<i>{{question.answer__count}} answer{{question.answer__count|pluralize}}</i>
 		</li>
 	{% endfor %}

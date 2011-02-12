@@ -1,6 +1,6 @@
 <title>Ask a Question</title>
 <form method="POST">
-{{ form.as_p }}
+	{{ form.as_p }}
 	By clicking on 'I agree' below you are agreeing to the <a href="/tos">Terms of Service</a>.<br>
 	<input type="submit" value="I agree. Post my question" />
 	{% csrf_token %}
