@@ -9,23 +9,26 @@
 {% endif %}
 <a href="/">Home</a><br>
 <br>
-${{question.price}}<br>
+{% if question.is_answered %}&#x2713; {% endif %}${{question.price}}<br>
 <br>
 {{question.user.email}}:<br>
 <br>
 {{question.text|markdown}}<br>
+{% if is_q %}
+	<a href="/question/{{question.id}}/edit">edit your question</a><br>
+{% endif %}
 <br>
 Answers:
 {% for answer in answers %}
 	<hr>
-	{% if is_q %}
+	{% if is_q and not answer.is_winner %}
 		<form method="POST">
 			{% csrf_token %}
 			<input type="hidden" name="answer" value="{{answer.id}}">
 			<input type="submit" value="Mark this answer as correct"><br>
 		</form>
 	{% endif %}
-	{{answer.user.email}}:<br>
+	{% if answer.is_winner %}&#x2713; {% endif %}{{answer.user.email}}:<br>
 	{{answer.text|markdown}}<br>
 {% endfor %}
 <hr>
