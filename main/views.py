@@ -110,6 +110,24 @@ def question(request, question_id):
 		'question': question,
 	}, context_instance = RequestContext(request))
 
+@csrf_protect
+def questionEdit(request, question_id):
+	user = request.user
+	question = Question.objects.get(pk = question_id)
+	is_q = user.is_authenticated() and user == question.user
+	if request.method == 'POST':
+		if is_q:
+			question.text = request.POST['text']
+			question.save()
+			messages.success(request, 'Your changes have been saved!')
+		return HttpResponseRedirect('/question/' + str(question.id))
+	else:
+		answers = Answer.objects.filter(question = question)
+		return render_to_response('questionEdit.html', {
+			'answers': answers,
+			'question': question,
+		}, context_instance = RequestContext(request))
+
 def questions(request):
 	questions = Question.objects.annotate(Count('answer'))
 	return render_to_response('questions.html', {'questions': questions})
