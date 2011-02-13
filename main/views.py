@@ -26,6 +26,25 @@ def getOrCreateUserFromEmail(email):
 		)
 
 @csrf_protect
+def answerEdit(request, answer_id):
+	user = request.user
+	answer = Answer.objects.get(pk = answer_id)
+	question = answer.question
+	is_a = user.is_authenticated() and user == answer.user
+	if request.method == 'POST':
+		if is_a:
+			answer.text = request.POST['text']
+			answer.save()
+			messages.success(request, 'Your changes have been saved!')
+		return HttpResponseRedirect('/question/' + str(question.id))
+	else:
+		answers = Answer.objects.filter(question = question)
+		return render_to_response('answerEdit.html', {
+			'answer': answer,
+			'question': question,
+		}, context_instance = RequestContext(request))
+
+@csrf_protect
 def ask(request):
 	if request.method == 'POST':
 		form = QuestionForm(request.POST)

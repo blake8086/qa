@@ -30,6 +30,9 @@ Answers:
 	{% endif %}
 	{% if answer.is_winner %}&#x2713; {% endif %}{{answer.user.email}}:<br>
 	{{answer.text|markdown}}<br>
+	{% if answer.user == user %}
+		<a href="/answer/{{answer.id}}/edit">edit my answer</a><br>
+	{% endif %}
 {% endfor %}
 <hr>
 {% if not is_q %}

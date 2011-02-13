@@ -5,6 +5,7 @@ admin.autodiscover()
 
 urlpatterns = patterns('',
     (r'^admin/', include(admin.site.urls)),
+    (r'^answer/(?P<answer_id>\d+)/edit$', 'main.views.answerEdit'),
     (r'^ask$', 'main.views.ask'),
     (r'^question/(?P<question_id>\d+)$', 'main.views.question'),
     (r'^question/(?P<question_id>\d+)/edit$', 'main.views.questionEdit'),

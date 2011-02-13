@@ -1,0 +1,26 @@
+{% load markup %}
+<title>QA: {{question.text|truncatewords:5}}</title>
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    	<li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+<a href="/">Home</a><br>
+<br>
+{% if question.is_answered %}&#x2713; {% endif %}${{question.price}}<br>
+<br>
+{{question.user.email}}:<br>
+<br>
+{{question.text|markdown}}<br>
+<br>
+Edit your answer:
+<hr>
+{% if answer.is_winner %}&#x2713; {% endif %}{{answer.user.email}}:<br>
+<form method="POST">
+	{% csrf_token %}
+	<textarea name="text" rows="20" cols="80">{{answer.text}}</textarea><br>
+	<input type="submit" value="Save my changes">
+</form>
+<hr>
