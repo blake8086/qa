@@ -116,7 +116,7 @@ def question(request, question_id):
 	question = Question.objects.get(pk = question_id)
 	is_q = user.is_authenticated() and user == question.user
 	if request.method == 'POST':
-		if is_q:
+		if is_q and not question.is_answered:
 			answer = Answer.objects.get(pk = request.POST['answer'])
 			answer.is_winner = True
 			question.is_answered = True
