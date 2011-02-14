@@ -1,5 +1,7 @@
+{% extends "base.html" %}
 {% load markup %}
-<title>Unanswered Questions</title>
+{% block title %}Unanswered Questions{% endblock %}
+{% block content %}
 <ul>
 	{% for question in questions %}
 		<li>
@@ -9,3 +11,4 @@
 		</li>
 	{% endfor %}
 </ul>
+{% endblock %}

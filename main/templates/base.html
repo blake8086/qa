@@ -1,0 +1,14 @@
+<title>{% block title %}{% endblock %}</title>
+<div style="float: left">
+	<a href="/">Home</a> | <a href="/ask">Ask</a> | <a href="/questions">Answer</a>
+</div>
+<div style="float: right;">
+	sign in / email / sign out
+</div>
+<div style="clear: both;" />
+<div style="float: left">
+	{% block messages %}{% endblock %}
+</div>
+<div style="clear: both;" />
+<br>
+{% block content %}{% endblock %}

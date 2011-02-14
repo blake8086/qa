@@ -1,45 +1,48 @@
+{% extends "base.html" %}
 {% load markup %}
-<title>QA: {{question.text|truncatewords:5}}</title>
-{% if messages %}
-<ul class="messages">
-    {% for message in messages %}
-    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-    {% endfor %}
-</ul>
-{% endif %}
-<a href="/">Home</a><br>
-<br>
-{% if question.is_answered %}&#x2713; {% endif %}${{question.price}}<br>
-<br>
-{{question.user.email}}:<br>
-<br>
-{{question.text|markdown}}<br>
-{% if is_q %}
-	<a href="/question/{{question.id}}/edit">edit your question</a><br>
-{% endif %}
-<br>
-Answers:
-{% for answer in answers %}
+{% block title %}QA: {{question.text|truncatewords:5}}{% endblock %}
+{% block messages %}
+	{% if messages %}
+	<ul class="messages">
+	    {% for message in messages %}
+	    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+	    {% endfor %}
+	</ul>
+	{% endif %}
+{% endblock %}
+{% block content %}
+	{% if question.is_answered %}&#x2713; {% endif %}${{question.price}}<br>
+	<br>
+	{{question.user.email}}:<br>
+	<br>
+	{{question.text|markdown}}<br>
+	{% if is_q %}
+		<a href="/question/{{question.id}}/edit">edit your question</a><br>
+	{% endif %}
+	<br>
+	Answers:
+	{% for answer in answers %}
+		<hr>
+		{% if is_q and not answer.is_winner %}
+			<form method="POST">
+				{% csrf_token %}
+				<input type="hidden" name="answer" value="{{answer.id}}">
+				<input type="submit" value="Mark this answer as correct"><br>
+			</form>
+		{% endif %}
+		{% if answer.is_winner %}&#x2713; {% endif %}{{answer.user.email}}:<br>
+		{{answer.text|markdown}}<br>
+		{% if answer.user == user %}
+			<a href="/answer/{{answer.id}}/edit">edit my answer</a><br>
+		{% endif %}
+	{% endfor %}
 	<hr>
-	{% if is_q and not answer.is_winner %}
+	{% if not is_q %}
 		<form method="POST">
+			{{ answerForm.as_p }}
+			By clicking on 'I agree' below you are agreeing to the <a href="/tos">Terms of Service</a>.<br>
+			<input type="submit" value="I agree. Post my answer." />
 			{% csrf_token %}
-			<input type="hidden" name="answer" value="{{answer.id}}">
-			<input type="submit" value="Mark this answer as correct"><br>
 		</form>
 	{% endif %}
-	{% if answer.is_winner %}&#x2713; {% endif %}{{answer.user.email}}:<br>
-	{{answer.text|markdown}}<br>
-	{% if answer.user == user %}
-		<a href="/answer/{{answer.id}}/edit">edit my answer</a><br>
-	{% endif %}
-{% endfor %}
-<hr>
-{% if not is_q %}
-	<form method="POST">
-		{{ answerForm.as_p }}
-		By clicking on 'I agree' below you are agreeing to the <a href="/tos">Terms of Service</a>.<br>
-		<input type="submit" value="I agree. Post my answer." />
-		{% csrf_token %}
-	</form>
-{% endif %}
+{% endblock %}

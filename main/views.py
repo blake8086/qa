@@ -1,4 +1,3 @@
-# Create your views here.
 from boto.fps.connection import FPSConnection
 from django import forms
 from django.contrib import messages
@@ -75,10 +74,12 @@ def ask(request):
 			return HttpResponse(url)#HttpResponseRedirect(url)
 	else:
 		form = QuestionForm(initial = {'bounty': u'10'})
-	return render_to_response('ask.html', {'form': form}, context_instance = RequestContext(request))
+	return render_to_response('ask.html', {
+		'form': form
+	}, context_instance = RequestContext(request))
 
 def index(request):
-	return render_to_response('index.html', {})
+	return render_to_response('index.html', {}, context_instance = RequestContext(request))
 
 @csrf_protect
 def question(request, question_id):
@@ -149,10 +150,12 @@ def questionEdit(request, question_id):
 
 def questions(request):
 	questions = Question.objects.annotate(Count('answer'))
-	return render_to_response('questions.html', {'questions': questions})
+	return render_to_response('questions.html', {
+		'questions': questions
+	}, context_instance = RequestContext(request))
 	
 def tos(request):
-	return render_to_response('tos.html', {})
+	return render_to_response('tos.html', {}, context_instance = RequestContext(request))
 
 def checkEmailConfirm(form):
 	cleaned_data = form.cleaned_data
