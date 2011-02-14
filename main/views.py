@@ -14,16 +14,26 @@ from settings import *
 import hashlib
 
 def getOrCreateUserFromEmail(email):
+	user = None
 	#is this a recognized user
 	userQuery = User.objects.filter(email = email)
 	if len(userQuery) > 0:
 		user = userQuery[0]
 	else:
+		password = User.objects.make_random_password(8)
 		user = User.objects.create_user(
 			username = hashlib.sha256(email).hexdigest()[:30],
 			email = email,
-			password = User.objects.make_random_password(8)
+			password = password
 		)
+		send_mail(
+			'Account created',
+			'Thanks for signing up with qa site!  Your password is %s' % password,
+			'blake8086@gmail.com',
+			[email],
+			fail_silently = False
+		)
+	return user
 
 @csrf_protect
 def answerEdit(request, answer_id):
@@ -132,7 +142,7 @@ def question(request, question_id):
 			if answerForm.is_valid():
 				if user.is_authenticated() == False:
 					email = answerForm.cleaned_data['email']
-					getOrCreateUserFromEmail(email)
+					user = getOrCreateUserFromEmail(email)
 				Answer.objects.create(
 					question = question,
 					text = answerForm.cleaned_data['text'],
