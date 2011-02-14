@@ -3,7 +3,16 @@
 	<a href="/">Home</a> | <a href="/ask">Ask</a> | <a href="/questions">Answer</a>
 </div>
 <div style="float: right;">
-	sign in / email / sign out
+	{% if user.email %}
+		{{user.email}} | <a href="/logout">logout</a>
+	{% else %}
+		<form action="/login" method="POST">
+			{% csrf_token %}
+			<label for="email">email:</label> <input type="text" name="email">
+			<label for="password">password:</label> <input type="password" name="password">
+			<input type="submit" value="login">
+		</form>
+	{% endif %}
 </div>
 <div style="clear: both;" />
 <div style="float: left">

@@ -1,6 +1,7 @@
 from boto.fps.connection import FPSConnection
 from django import forms
 from django.contrib import messages
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.core.mail import send_mail
 from django.db.models import Count
@@ -80,6 +81,23 @@ def ask(request):
 
 def index(request):
 	return render_to_response('index.html', {}, context_instance = RequestContext(request))
+	
+def loginView(request):
+	if request.method == 'POST':
+		user = User.objects.get(email = request.POST['email'])
+		user = authenticate(username = user.username, password = request.POST['password'])
+		if user is not None:
+			login(request, user)
+			messages.success(request, 'Logged in as ' + user.email)
+			return HttpResponseRedirect('/')
+		else:
+			messages.error(request, 'Wrong email/password')
+	#if possible, change to redirect to referring page
+	return HttpResponseRedirect('/')
+
+def logoutView(request):
+	logout(request)
+	return HttpResponseRedirect('/')
 
 @csrf_protect
 def question(request, question_id):
@@ -154,6 +172,9 @@ def questions(request):
 		'questions': questions
 	}, context_instance = RequestContext(request))
 	
+def register(request):
+	return render_to_response('register.html', {}, context_instance = RequestContext(request))
+
 def tos(request):
 	return render_to_response('tos.html', {}, context_instance = RequestContext(request))
 
