@@ -14,10 +14,16 @@
 		</form>
 	{% endif %}
 </div>
-<div style="clear: both;" />
-<div style="float: left">
-	{% block messages %}{% endblock %}
+<div style="clear: both;"></div>
+<div>
+	{% if messages %}
+		<ul class="messages">
+		    {% for message in messages %}
+			    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+		    {% endfor %}
+		</ul>
+	{% endif %}
 </div>
-<div style="clear: both;" />
+<div style="clear: both;"></div>
 <br>
 {% block content %}{% endblock %}

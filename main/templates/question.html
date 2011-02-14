@@ -1,15 +1,6 @@
 {% extends "base.html" %}
 {% load markup %}
 {% block title %}QA: {{question.text|truncatewords:5}}{% endblock %}
-{% block messages %}
-	{% if messages %}
-	<ul class="messages">
-	    {% for message in messages %}
-	    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-	    {% endfor %}
-	</ul>
-	{% endif %}
-{% endblock %}
 {% block content %}
 	{% if question.is_answered %}&#x2713; {% endif %}${{question.price}}<br>
 	<br>
