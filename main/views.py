@@ -13,19 +13,22 @@ from main.models import Answer, Question
 from settings import *
 import hashlib
 
-def getOrCreateUserFromEmail(email):
+def getOrCreateUserFromEmail(request, email):
 	user = None
 	#is this a recognized user
 	userQuery = User.objects.filter(email = email)
 	if len(userQuery) > 0:
 		user = userQuery[0]
 	else:
+		username = hashlib.sha256(email).hexdigest()[:30],
 		password = User.objects.make_random_password(8)
 		user = User.objects.create_user(
-			username = hashlib.sha256(email).hexdigest()[:30],
+			username = username,
 			email = email,
 			password = password
 		)
+		user = authenticate(username = username, password = password)
+		login(request, user)
 		send_mail(
 			'Account created',
 			'Thanks for signing up with qa site!  Your password is %s' % password,
@@ -60,7 +63,7 @@ def ask(request):
 		form = QuestionForm(request.POST)
 		if form.is_valid():
 			email = form.cleaned_data['email']
-			user = getOrCreateUserFromEmail(email)
+			user = getOrCreateUserFromEmail(request, email)
 			#add question but mark as not paid
 			q = Question.objects.create(
 				text = form.cleaned_data['text'],
@@ -142,7 +145,7 @@ def question(request, question_id):
 			if answerForm.is_valid():
 				if user.is_authenticated() == False:
 					email = answerForm.cleaned_data['email']
-					user = getOrCreateUserFromEmail(email)
+					user = getOrCreateUserFromEmail(request, email)
 				Answer.objects.create(
 					question = question,
 					text = answerForm.cleaned_data['text'],
