@@ -23,7 +23,7 @@
 	Answers:
 	{% for answer in answers %}
 		<hr>
-		{% if is_q and not answer.is_winner %}
+		{% if is_q and not answer.is_winner and not question.is_answered %}
 			<form method="POST">
 				{% csrf_token %}
 				<input type="hidden" name="answer" value="{{answer.id}}">
