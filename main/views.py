@@ -13,31 +13,6 @@ from main.models import Answer, Question
 from settings import *
 import hashlib
 
-def getOrCreateUserFromEmail(request, email):
-	user = None
-	#is this a recognized user
-	userQuery = User.objects.filter(email = email)
-	if len(userQuery) > 0:
-		user = userQuery[0]
-	else:
-		username = hashlib.sha256(email).hexdigest()[:30],
-		password = User.objects.make_random_password(8)
-		user = User.objects.create_user(
-			username = username,
-			email = email,
-			password = password
-		)
-		user = authenticate(username = username, password = password)
-		login(request, user)
-		send_mail(
-			'Account created',
-			'Thanks for signing up with qa site!  Your password is %s' % password,
-			'blake8086@gmail.com',
-			[email],
-			fail_silently = False
-		)
-	return user
-
 @csrf_protect
 def answerEdit(request, answer_id):
 	user = request.user
@@ -70,7 +45,7 @@ def ask(request):
 				price = form.cleaned_data['bounty'],
 				user = user,
 			)
-			#get a question slug
+			#todo: get a question slug
 			#redirect to amazon pipeline
 			connection = FPSConnection(
 				aws_access_key_id = AWS_KEY_ID,
@@ -143,15 +118,54 @@ def question(request, question_id):
 		else:
 			answerForm = AnswerForm(request.POST)
 			if answerForm.is_valid():
-				if user.is_authenticated() == False:
-					email = answerForm.cleaned_data['email']
-					user = getOrCreateUserFromEmail(request, email)
-				Answer.objects.create(
-					question = question,
-					text = answerForm.cleaned_data['text'],
-					user = user,
-				)
-				messages.success(request, 'Answer posted!')
+				if user.is_authenticated():
+					Answer.objects.create(
+						question = question,
+						text = answerForm.cleaned_data['text'],
+						user = user,
+					)
+					messages.success(request, 'Answer posted!')
+				else:
+					#check for new vs existing customer
+					print answerForm.cleaned_data['newUser']
+					if answerForm.cleaned_data['newUser']:
+						email = answerForm.cleaned_data['email']
+						username = hashlib.sha256(email).hexdigest()[:30],
+						password = User.objects.make_random_password(8)
+						user = User.objects.create_user(
+							username = username,
+							email = email,
+							password = password
+						)
+						user = authenticate(username = username, password = password)
+						login(request, user)
+						#todo: "you will either need to login or click this link to activate"
+						send_mail(
+							'Account created',
+							'Thanks for signing up with qa site!  Your password is %s' % password,
+							'blake8086@gmail.com',
+							[email],
+							fail_silently = False
+						)
+						#todo: this answer is unpublished initially
+						Answer.objects.create(
+							question = question,
+							text = answerForm.cleaned_data['text'],
+							user = user,
+						)
+						messages.success(request, 'Answer saved! You will need to activate your account before your answer becomes public.')
+					else:
+						email = answerForm.cleaned_data['email']
+						user = User.objects.filter(email = email)[0]
+						#todo: throw error if not found
+						user = authenticate(username = user.username, password = answerForm.cleaned_data['password'])
+						Answer.objects.create(
+							question = question,
+							text = answerForm.cleaned_data['text'],
+							user = user,
+						)
+						messages.success(request, 'Answer posted!')
+					
 	answers = Answer.objects.filter(question = question)
 	
 	return render_to_response('question.html', {
@@ -203,7 +217,12 @@ def checkEmailConfirm(form):
 class AnswerForm(forms.Form):
 	text = forms.CharField(label = 'My Answer:', widget = forms.Textarea)
 	email = forms.EmailField(label = 'If my answer is selected, notify me by email at:')
+	newUser = forms.BooleanField(label = 'New User?', widget = forms.RadioSelect(choices = (
+		('true', 'No, I am a new customer'),
+		('false', 'Yes, I have a password:'),
+	)))
 	email2 = forms.EmailField(label = 'Confirm email:')
+	password = forms.CharField(label = 'Password:', widget = forms.PasswordInput())
 
 	def clean(self):
 		return checkEmailConfirm(self)
@@ -211,7 +230,12 @@ class AnswerForm(forms.Form):
 class QuestionForm(forms.Form):
 	text = forms.CharField(label = 'My Question:', widget = forms.Textarea)
 	email = forms.EmailField(label = 'When my question is answered, notify me by email at:')
+	newUser = forms.BooleanField(label = 'New User?', widget = forms.RadioSelect(choices = (
+		('true', 'No, I am a new customer'),
+		('false', 'Yes, I have a password:'),
+	)))
 	email2 = forms.EmailField(label = 'Confirm email:')
+	password = forms.CharField(label = 'Password:', widget = forms.PasswordInput())
 	bounty = forms.CharField(label = 'Bounty for a correct answer:', widget = forms.Select(choices = (
 		('1', '$1.00'), ('2', '$2.00'), ('3', '$3.00'), ('5', '$5.00'),
 		('10', '$10.00'), ('15', '$15.00'), ('20', '$20.00'), ('25', '$25.00'),
