@@ -48,15 +48,7 @@ def ask(request):
 			else:
 				if questionForm.cleaned_data['newUser'] == u'True':
 					email = questionForm.cleaned_data['email']
-					username = hashlib.sha256(email).hexdigest()[:30],
-					password = User.objects.make_random_password(8)
-					user = User.objects.create_user(
-						username = username,
-						email = email,
-						password = password
-					)
-					user = authenticate(username = username, password = password)
-					login(request, user)
+					user, password = createUserFromEmail(email, request)
 					#todo: "you will either need to login or click this link to activate"
 					send_mail(
 						'Account created',
@@ -163,15 +155,7 @@ def question(request, question_id):
 				else:
 					if answerForm.cleaned_data['newUser'] == u'True':
 						email = answerForm.cleaned_data['email']
-						username = hashlib.sha256(email).hexdigest()[:30],
-						password = User.objects.make_random_password(8)
-						user = User.objects.create_user(
-							username = username,
-							email = email,
-							password = password
-						)
-						user = authenticate(username = username, password = password)
-						login(request, user)
+						user, password = createUserFromEmail(email, request)
 						#todo: "you will either need to login or click this link to activate"
 						send_mail(
 							'Account created',
@@ -238,6 +222,19 @@ def register(request):
 
 def tos(request):
 	return render_to_response('tos.html', {}, context_instance = RequestContext(request))
+
+###############################################################################
+def createUserFromEmail(email, request):
+	username = hashlib.sha256(email).hexdigest()[:30],
+	password = User.objects.make_random_password(8)
+	user = User.objects.create_user(
+		username = username,
+		email = email,
+		password = password
+	)
+	user = authenticate(username = username, password = password)
+	login(request, user)
+	return (user, password)
 
 def checkEmailConfirm(form):
 	cleaned_data = form.cleaned_data
