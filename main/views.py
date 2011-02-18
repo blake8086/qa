@@ -236,7 +236,7 @@ def createUserFromEmail(email, request):
 	login(request, user)
 	return (user, password)
 
-def checkEmailConfirm(form):
+def checkEmailConfirmation(form):
 	cleaned_data = form.cleaned_data
 	email = cleaned_data.get('email')
 	email2 = cleaned_data.get('email2')
@@ -245,8 +245,7 @@ def checkEmailConfirm(form):
 			raise forms.ValidationError("Email addresses must match.")
 	return cleaned_data
 	
-class AnswerForm(forms.Form):
-	text = forms.CharField(label = 'My Answer:', widget = forms.Textarea)
+class LoginForm(forms.Form):
 	email = forms.EmailField(label = 'If my answer is selected, notify me by email at:')
 	newUser = forms.ChoiceField(
 		label = 'Do you have a [qa site] password?',
@@ -258,28 +257,17 @@ class AnswerForm(forms.Form):
 	)
 	email2 = forms.EmailField(label = 'Confirm email:')
 	password = forms.CharField(label = 'Password:', widget = forms.PasswordInput())
-
+	
 	def clean(self):
-		return checkEmailConfirm(self)
+		return checkEmailConfirmation(self)
+	
+class AnswerForm(LoginForm):
+	text = forms.CharField(label = 'My Answer:', widget = forms.Textarea)
 
-class QuestionForm(forms.Form):
+class QuestionForm(LoginForm):
 	text = forms.CharField(label = 'My Question:', widget = forms.Textarea)
-	email = forms.EmailField(label = 'When my question is answered, notify me by email at:')
-	newUser = forms.ChoiceField(
-		label = 'Do you have a [qa site] password?',
-		widget = forms.RadioSelect,
-		choices = (
-			('True', 'No, I am a new customer'),
-			('False', 'Yes, I have a password:'),
-		),
-	)
-	email2 = forms.EmailField(label = 'Confirm email:')
-	password = forms.CharField(label = 'Password:', widget = forms.PasswordInput())
 	bounty = forms.CharField(label = 'Bounty for a correct answer:', widget = forms.Select(choices = (
 		('1', '$1.00'), ('2', '$2.00'), ('3', '$3.00'), ('5', '$5.00'),
 		('10', '$10.00'), ('15', '$15.00'), ('20', '$20.00'), ('25', '$25.00'),
 		('30', '$30.00'), ('40', '$40.00'), ('50', '$50.00'), ('100', '$100.00'),
 	)))
-	
-	def clean(self):
-		return checkEmailConfirm(self)
