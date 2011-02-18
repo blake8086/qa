@@ -161,7 +161,7 @@ def question(request, question_id):
 					)
 					messages.success(request, 'Answer posted!')
 				else:
-					if answerForm.cleaned_data['newUser']:
+					if answerForm.cleaned_data['newUser'] == u'True':
 						email = answerForm.cleaned_data['email']
 						username = hashlib.sha256(email).hexdigest()[:30],
 						password = User.objects.make_random_password(8)
@@ -192,6 +192,7 @@ def question(request, question_id):
 						user = User.objects.filter(email = email)[0]
 						#todo: throw error if not found
 						user = authenticate(username = user.username, password = answerForm.cleaned_data['password'])
+						login(request, user)
 						Answer.objects.create(
 							question = question,
 							text = answerForm.cleaned_data['text'],
@@ -250,10 +251,14 @@ def checkEmailConfirm(form):
 class AnswerForm(forms.Form):
 	text = forms.CharField(label = 'My Answer:', widget = forms.Textarea)
 	email = forms.EmailField(label = 'If my answer is selected, notify me by email at:')
-	newUser = forms.BooleanField(label = 'New User?', widget = forms.RadioSelect(choices = (
-		(True, 'No, I am a new customer'),
-		(False, 'Yes, I have a password:'),
-	)))
+	newUser = forms.ChoiceField(
+		label = 'Do you have a [qa site] password?',
+		widget = forms.RadioSelect,
+		choices = (
+			('True', 'No, I am a new customer'),
+			('False', 'Yes, I have a password:'),
+		),
+	)
 	email2 = forms.EmailField(label = 'Confirm email:')
 	password = forms.CharField(label = 'Password:', widget = forms.PasswordInput())
 
