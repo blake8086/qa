@@ -46,9 +46,7 @@ def ask(request):
 					user = user,
 				)
 			else:
-				print 'False' == questionForm.cleaned_data['newUser']
-				print 'True' == questionForm.cleaned_data['newUser']
-				if questionForm.cleaned_data['newUser'] == 'True':
+				if questionForm.cleaned_data['newUser'] == u'True':
 					email = questionForm.cleaned_data['email']
 					username = hashlib.sha256(email).hexdigest()[:30],
 					password = User.objects.make_random_password(8)
@@ -99,9 +97,9 @@ def ask(request):
 			)
 			return HttpResponse(url)#HttpResponseRedirect(url)
 	else:
-		form = QuestionForm(initial = {'bounty': u'10'})
+		questionForm = QuestionForm(initial = {'bounty': u'10'})
 	return render_to_response('ask.html', {
-		'form': form
+		'questionForm': questionForm
 	}, context_instance = RequestContext(request))
 
 def index(request):
@@ -253,8 +251,8 @@ class AnswerForm(forms.Form):
 	text = forms.CharField(label = 'My Answer:', widget = forms.Textarea)
 	email = forms.EmailField(label = 'If my answer is selected, notify me by email at:')
 	newUser = forms.BooleanField(label = 'New User?', widget = forms.RadioSelect(choices = (
-		('true', 'No, I am a new customer'),
-		('false', 'Yes, I have a password:'),
+		(True, 'No, I am a new customer'),
+		(False, 'Yes, I have a password:'),
 	)))
 	email2 = forms.EmailField(label = 'Confirm email:')
 	password = forms.CharField(label = 'Password:', widget = forms.PasswordInput())
@@ -265,10 +263,14 @@ class AnswerForm(forms.Form):
 class QuestionForm(forms.Form):
 	text = forms.CharField(label = 'My Question:', widget = forms.Textarea)
 	email = forms.EmailField(label = 'When my question is answered, notify me by email at:')
-	newUser = forms.BooleanField(label = 'New User?', widget = forms.RadioSelect(choices = (
-		('true', 'No, I am a new customer'),
-		('false', 'Yes, I have a password:'),
-	)))
+	newUser = forms.ChoiceField(
+		label = 'Do you have a [qa site] password?',
+		widget = forms.RadioSelect,
+		choices = (
+			('True', 'No, I am a new customer'),
+			('False', 'Yes, I have a password:'),
+		),
+	)
 	email2 = forms.EmailField(label = 'Confirm email:')
 	password = forms.CharField(label = 'Password:', widget = forms.PasswordInput())
 	bounty = forms.CharField(label = 'Bounty for a correct answer:', widget = forms.Select(choices = (
