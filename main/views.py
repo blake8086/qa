@@ -34,17 +34,54 @@ def answerEdit(request, answer_id):
 
 @csrf_protect
 def ask(request):
+	user = request.user
+	q = None
 	if request.method == 'POST':
-		form = QuestionForm(request.POST)
-		if form.is_valid():
-			email = form.cleaned_data['email']
-			user = getOrCreateUserFromEmail(request, email)
-			#add question but mark as not paid
-			q = Question.objects.create(
-				text = form.cleaned_data['text'],
-				price = form.cleaned_data['bounty'],
-				user = user,
-			)
+		questionForm = QuestionForm(request.POST)
+		if questionForm.is_valid():
+			if user.is_authenticated():
+				q = Question.objects.create(
+					text = questionForm.cleaned_data['text'],
+					price = questionForm.cleaned_data['bounty'],
+					user = user,
+				)
+			else:
+				print 'False' == questionForm.cleaned_data['newUser']
+				print 'True' == questionForm.cleaned_data['newUser']
+				if questionForm.cleaned_data['newUser'] == 'True':
+					email = questionForm.cleaned_data['email']
+					username = hashlib.sha256(email).hexdigest()[:30],
+					password = User.objects.make_random_password(8)
+					user = User.objects.create_user(
+						username = username,
+						email = email,
+						password = password
+					)
+					user = authenticate(username = username, password = password)
+					login(request, user)
+					#todo: "you will either need to login or click this link to activate"
+					send_mail(
+						'Account created',
+						'Thanks for signing up with qa site!  Your password is %s' % password,
+						'blake8086@gmail.com',
+						[email],
+						fail_silently = False
+					)
+					q = Question.objects.create(
+						text = questionForm.cleaned_data['text'],
+						price = questionForm.cleaned_data['bounty'],
+						user = user,
+					)
+				else:
+					email = questionForm.cleaned_data['email']
+					user = User.objects.filter(email = email)[0]
+					#todo: throw error if not found
+					user = authenticate(username = user.username, password = questionForm.cleaned_data['password'])
+					q = Question.objects.create(
+						text = questionForm.cleaned_data['text'],
+						price = questionForm.cleaned_data['bounty'],
+						user = user,
+					)
 			#todo: get a question slug
 			#redirect to amazon pipeline
 			connection = FPSConnection(
@@ -126,8 +163,6 @@ def question(request, question_id):
 					)
 					messages.success(request, 'Answer posted!')
 				else:
-					#check for new vs existing customer
-					print answerForm.cleaned_data['newUser']
 					if answerForm.cleaned_data['newUser']:
 						email = answerForm.cleaned_data['email']
 						username = hashlib.sha256(email).hexdigest()[:30],
