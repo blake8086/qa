@@ -12,7 +12,6 @@ urlpatterns = patterns('',
     (r'^question/(?P<question_id>\d+)$', 'main.views.question'),
     (r'^question/(?P<question_id>\d+)/edit$', 'main.views.questionEdit'),
     (r'^questions$', 'main.views.questions'),
-	(r'^register$', 'main.views.register'),
     (r'^tos$', 'main.views.tos'),
     (r'^', 'main.views.index'),
 )
