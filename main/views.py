@@ -39,13 +39,7 @@ def ask(request):
 	if request.method == 'POST':
 		questionForm = QuestionForm(request.POST)
 		if questionForm.is_valid():
-			if user.is_authenticated():
-				q = Question.objects.create(
-					text = questionForm.cleaned_data['text'],
-					price = questionForm.cleaned_data['bounty'],
-					user = user,
-				)
-			else:
+			if not user.is_authenticated():
 				if questionForm.cleaned_data['newUser'] == u'True':
 					email = questionForm.cleaned_data['email']
 					user, password = createUserFromEmail(email, request)
@@ -57,21 +51,16 @@ def ask(request):
 						[email],
 						fail_silently = False
 					)
-					q = Question.objects.create(
-						text = questionForm.cleaned_data['text'],
-						price = questionForm.cleaned_data['bounty'],
-						user = user,
-					)
 				else:
 					email = questionForm.cleaned_data['email']
 					user = User.objects.filter(email = email)[0]
 					#todo: throw error if not found
 					user = authenticate(username = user.username, password = questionForm.cleaned_data['password'])
-					q = Question.objects.create(
-						text = questionForm.cleaned_data['text'],
-						price = questionForm.cleaned_data['bounty'],
-						user = user,
-					)
+			q = Question.objects.create(
+				text = questionForm.cleaned_data['text'],
+				price = questionForm.cleaned_data['bounty'],
+				user = user,
+			)
 			#todo: get a question slug
 			#redirect to amazon pipeline
 			connection = FPSConnection(
