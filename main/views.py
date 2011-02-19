@@ -134,14 +134,8 @@ def question(request, question_id):
 		else:
 			answerForm = AnswerForm(request.POST)
 			if answerForm.is_valid():
-				if user.is_authenticated():
-					Answer.objects.create(
-						question = question,
-						text = answerForm.cleaned_data['text'],
-						user = user,
-					)
-					messages.success(request, 'Answer posted!')
-				else:
+				message = 'Answer posted!'
+				if not user.is_authenticated():
 					if answerForm.cleaned_data['newUser'] == u'True':
 						email = answerForm.cleaned_data['email']
 						user, password = createUserFromEmail(email, request)
@@ -154,24 +148,19 @@ def question(request, question_id):
 							fail_silently = False
 						)
 						#todo: this answer is unpublished initially
-						Answer.objects.create(
-							question = question,
-							text = answerForm.cleaned_data['text'],
-							user = user,
-						)
-						messages.success(request, 'Answer saved! You will need to activate your account before your answer becomes public.')
+						message = 'Answer saved! You will need to activate your account before your answer becomes public.'
 					else:
 						email = answerForm.cleaned_data['email']
 						user = User.objects.filter(email = email)[0]
 						#todo: throw error if not found
 						user = authenticate(username = user.username, password = answerForm.cleaned_data['password'])
 						login(request, user)
-						Answer.objects.create(
-							question = question,
-							text = answerForm.cleaned_data['text'],
-							user = user,
-						)
-						messages.success(request, 'Answer posted!')
+				Answer.objects.create(
+					question = question,
+					text = answerForm.cleaned_data['text'],
+					user = user,
+				)
+				messages.success(request, message)
 					
 	answers = Answer.objects.filter(question = question)
 	
