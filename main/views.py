@@ -220,13 +220,11 @@ def checkEmailConfirmation(form):
 			raise forms.ValidationError("Email addresses must match.")
 	return cleaned_data
 
-class AnswerForm(forms.Form):
-	text = forms.CharField(label = 'My Answer:', widget = forms.Textarea)
-
+class LoginForm(forms.Form):
 	def __init__(self, user, *args, **kwargs):
-		super(AnswerForm, self).__init__(*args, **kwargs)
+		super(LoginForm, self).__init__(*args, **kwargs)
 		if not user.is_authenticated():
-			self.fields['email'] = forms.EmailField(label = 'When my answer is selected, notify me by email at:')
+			self.fields['email'] = forms.EmailField(label = 'Email:')
 			self.fields['newUser'] = forms.ChoiceField(
 				label = 'Do you have a [qa site] password?',
 				widget = forms.RadioSelect,
@@ -237,32 +235,20 @@ class AnswerForm(forms.Form):
 			)
 			self.fields['email2'] = forms.EmailField(label = 'Confirm email:')
 			self.fields['password'] = forms.CharField(label = 'Password:', widget = forms.PasswordInput())
-	
+
+class AnswerForm(LoginForm):
+	text = forms.CharField(label = 'My Answer:', widget = forms.Textarea)
+
 	def clean(self):
 		return checkEmailConfirmation(self)
 
-class QuestionForm(forms.Form):
+class QuestionForm(LoginForm):
 	text = forms.CharField(label = 'My Question:', widget = forms.Textarea)
 	bounty = forms.CharField(label = 'Bounty for a correct answer:', widget = forms.Select(choices = (
 		('1', '$1.00'), ('2', '$2.00'), ('3', '$3.00'), ('5', '$5.00'),
 		('10', '$10.00'), ('15', '$15.00'), ('20', '$20.00'), ('25', '$25.00'),
 		('30', '$30.00'), ('40', '$40.00'), ('50', '$50.00'), ('100', '$100.00'),
 	)))
-	
-	def __init__(self, user, *args, **kwargs):
-		super(QuestionForm, self).__init__(*args, **kwargs)
-		if not user.is_authenticated():
-			self.fields['email'] = forms.EmailField(label = 'When my question is answered, notify me by email at:')
-			self.fields['newUser'] = forms.ChoiceField(
-				label = 'Do you have a [qa site] password?',
-				widget = forms.RadioSelect,
-				choices = (
-					('True', 'No, I am a new customer'),
-					('False', 'Yes, I have a password:'),
-				),
-			)
-			self.fields['email2'] = forms.EmailField(label = 'Confirm email:')
-			self.fields['password'] = forms.CharField(label = 'Password:', widget = forms.PasswordInput())
 	
 	def clean(self):
 		return checkEmailConfirmation(self)
