@@ -211,36 +211,49 @@ def createUserFromEmail(email, request):
 	login(request, user)
 	return (user, password)
 
-def checkEmailConfirmation(form):
-	cleaned_data = form.cleaned_data
-	email = cleaned_data.get('email')
-	email2 = cleaned_data.get('email2')
-	if email and email2:
-		if email != email2:
-			raise forms.ValidationError("Email addresses must match.")
-	return cleaned_data
-
 class LoginForm(forms.Form):
 	def __init__(self, user, *args, **kwargs):
 		super(LoginForm, self).__init__(*args, **kwargs)
 		if not user.is_authenticated():
 			self.fields['email'] = forms.EmailField(label = 'Email:')
 			self.fields['newUser'] = forms.ChoiceField(
-				label = 'Do you have a [qa site] password?',
-				widget = forms.RadioSelect,
 				choices = (
 					('True', 'No, I am a new customer'),
 					('False', 'Yes, I have a password:'),
 				),
+				label = 'Do you have a [qa site] password?',
+				widget = forms.RadioSelect,
 			)
-			self.fields['email2'] = forms.EmailField(label = 'Confirm email:')
-			self.fields['password'] = forms.CharField(label = 'Password:', widget = forms.PasswordInput())
+			self.fields['email2'] = forms.EmailField(label = 'Confirm email:', required = False)
+			self.fields['password'] = forms.CharField(
+				label = 'Password:',
+				required = False,
+				widget = forms.PasswordInput()
+			)
+
+	def clean_email2(self):
+		email = self.cleaned_data.get('email')
+		email2 = self.cleaned_data.get('email2')
+		if self.cleaned_data.get('newUser') == 'True':
+			if email != email2:
+				raise forms.ValidationError("Email addresses must match.")
+		return email2
+
+	def clean_password(self):
+		password = self.cleaned_data.get('password')
+		if self.cleaned_data.get('newUser') == 'False':
+			userQuery = User.objects.filter(email = self.cleaned_data.get('email'))
+			if userQuery:
+				user = userQuery[0]
+				user = authenticate(username = user.username, password = password)
+				if not user:
+					raise forms.ValidationError("Wrong email/password combination.")
+			else:
+				raise forms.ValidationError("Wrong email/password combination.")
+		return password
 
 class AnswerForm(LoginForm):
 	text = forms.CharField(label = 'My Answer:', widget = forms.Textarea)
-
-	def clean(self):
-		return checkEmailConfirmation(self)
 
 class QuestionForm(LoginForm):
 	text = forms.CharField(label = 'My Question:', widget = forms.Textarea)
@@ -249,6 +262,3 @@ class QuestionForm(LoginForm):
 		('10', '$10.00'), ('15', '$15.00'), ('20', '$20.00'), ('25', '$25.00'),
 		('30', '$30.00'), ('40', '$40.00'), ('50', '$50.00'), ('100', '$100.00'),
 	)))
-	
-	def clean(self):
-		return checkEmailConfirmation(self)
