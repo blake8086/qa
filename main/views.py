@@ -37,7 +37,7 @@ def ask(request):
 	user = request.user
 	q = None
 	if request.method == 'POST':
-		questionForm = QuestionForm(request.POST)
+		questionForm = QuestionForm(user, request.POST)
 		if questionForm.is_valid():
 			if not user.is_authenticated():
 				if questionForm.cleaned_data['newUser'] == u'True':
@@ -78,7 +78,7 @@ def ask(request):
 			)
 			return HttpResponse(url)#HttpResponseRedirect(url)
 	else:
-		questionForm = QuestionForm(initial = {'bounty': u'10'})
+		questionForm = QuestionForm(user, initial = {'bounty': u'10'})
 	return render_to_response('ask.html', {
 		'questionForm': questionForm
 	}, context_instance = RequestContext(request))
@@ -105,8 +105,8 @@ def logoutView(request):
 
 @csrf_protect
 def question(request, question_id):
-	answerForm = AnswerForm()
 	user = request.user
+	answerForm = AnswerForm(user)
 	question = Question.objects.get(pk = question_id)
 	is_q = user.is_authenticated() and user == question.user
 	if request.method == 'POST':
@@ -132,7 +132,7 @@ def question(request, question_id):
 				fail_silently = False
 			)
 		else:
-			answerForm = AnswerForm(request.POST)
+			answerForm = AnswerForm(user, request.POST)
 			if answerForm.is_valid():
 				message = 'Answer posted!'
 				if not user.is_authenticated():
@@ -219,21 +219,25 @@ def checkEmailConfirmation(form):
 		if email != email2:
 			raise forms.ValidationError("Email addresses must match.")
 	return cleaned_data
-	
+
 class AnswerForm(forms.Form):
 	text = forms.CharField(label = 'My Answer:', widget = forms.Textarea)
-	email = forms.EmailField(label = 'If my answer is selected, notify me by email at:')
-	newUser = forms.ChoiceField(
-		label = 'Do you have a [qa site] password?',
-		widget = forms.RadioSelect,
-		choices = (
-			('True', 'No, I am a new customer'),
-			('False', 'Yes, I have a password:'),
-		),
-	)
-	email2 = forms.EmailField(label = 'Confirm email:')
-	password = forms.CharField(label = 'Password:', widget = forms.PasswordInput())
 
+	def __init__(self, user, *args, **kwargs):
+		super(AnswerForm, self).__init__(*args, **kwargs)
+		if not user.is_authenticated():
+			self.fields['email'] = forms.EmailField(label = 'When my answer is selected, notify me by email at:')
+			self.fields['newUser'] = forms.ChoiceField(
+				label = 'Do you have a [qa site] password?',
+				widget = forms.RadioSelect,
+				choices = (
+					('True', 'No, I am a new customer'),
+					('False', 'Yes, I have a password:'),
+				),
+			)
+			self.fields['email2'] = forms.EmailField(label = 'Confirm email:')
+			self.fields['password'] = forms.CharField(label = 'Password:', widget = forms.PasswordInput())
+	
 	def clean(self):
 		return checkEmailConfirmation(self)
 
@@ -244,17 +248,21 @@ class QuestionForm(forms.Form):
 		('10', '$10.00'), ('15', '$15.00'), ('20', '$20.00'), ('25', '$25.00'),
 		('30', '$30.00'), ('40', '$40.00'), ('50', '$50.00'), ('100', '$100.00'),
 	)))
-	email = forms.EmailField(label = 'When my question is answered, notify me by email at:')
-	newUser = forms.ChoiceField(
-		label = 'Do you have a [qa site] password?',
-		widget = forms.RadioSelect,
-		choices = (
-			('True', 'No, I am a new customer'),
-			('False', 'Yes, I have a password:'),
-		),
-	)
-	email2 = forms.EmailField(label = 'Confirm email:')
-	password = forms.CharField(label = 'Password:', widget = forms.PasswordInput())
+	
+	def __init__(self, user, *args, **kwargs):
+		super(QuestionForm, self).__init__(*args, **kwargs)
+		if not user.is_authenticated():
+			self.fields['email'] = forms.EmailField(label = 'When my question is answered, notify me by email at:')
+			self.fields['newUser'] = forms.ChoiceField(
+				label = 'Do you have a [qa site] password?',
+				widget = forms.RadioSelect,
+				choices = (
+					('True', 'No, I am a new customer'),
+					('False', 'Yes, I have a password:'),
+				),
+			)
+			self.fields['email2'] = forms.EmailField(label = 'Confirm email:')
+			self.fields['password'] = forms.CharField(label = 'Password:', widget = forms.PasswordInput())
 	
 	def clean(self):
 		return checkEmailConfirmation(self)
