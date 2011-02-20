@@ -6,6 +6,7 @@ class Answer(models.Model):
 	deleted = models.BooleanField(default = False)
 	is_winner = models.BooleanField(default = False)
 	modified = models.DateTimeField(auto_now = True)
+	published = models.BooleanField(default = False)
 	question = models.ForeignKey('Question')
 	text = models.TextField()
 	user = models.ForeignKey(User)

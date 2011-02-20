@@ -13,18 +13,23 @@
 	<br>
 	Answers:
 	{% for answer in answers %}
-		<hr>
-		{% if is_q and not answer.is_winner and not question.is_answered %}
-			<form method="POST">
-				{% csrf_token %}
-				<input type="hidden" name="answer" value="{{answer.id}}">
-				<input type="submit" value="Mark this answer as correct"><br>
-			</form>
-		{% endif %}
-		{% if answer.is_winner %}&#x2713; {% endif %}{{answer.user.email}}:<br>
-		{{answer.text|markdown}}<br>
-		{% if answer.user == user %}
-			<a href="/answer/{{answer.id}}/edit">edit my answer</a><br>
+		{% if answer.published or answer.user == user %}
+			<hr>
+			{% if is_q and not answer.is_winner and not question.is_answered %}
+				<form method="POST">
+					{% csrf_token %}
+					<input type="hidden" name="answer" value="{{answer.id}}">
+					<input type="submit" value="Mark this answer as correct"><br>
+				</form>
+			{% endif %}
+			{% if answer.is_winner %}&#x2713; {% endif %}{{answer.user.email}}:<br>
+			{{answer.text|markdown}}<br>
+			{% if answer.user == user %}
+				{% if not answer.published %}
+					<i>This answer is not yet public, please activate your account to make it public.</i>
+				{% endif %}
+				<a href="/answer/{{answer.id}}/edit">edit my answer</a><br>
+			{% endif %}
 		{% endif %}
 	{% endfor %}
 	<hr>

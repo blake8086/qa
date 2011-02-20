@@ -4,6 +4,7 @@ from django.contrib import admin
 admin.autodiscover()
 
 urlpatterns = patterns('',
+	(r'^activate/(?P<email>[^/]+)/(?P<key>.{8})$', 'main.views.activate'),
     (r'^admin/', include(admin.site.urls)),
     (r'^answer/(?P<answer_id>\d+)/edit$', 'main.views.answerEdit'),
     (r'^ask$', 'main.views.ask'),

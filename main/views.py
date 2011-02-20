@@ -13,6 +13,19 @@ from main.models import Answer, Question
 from settings import *
 import hashlib
 
+def activate(request, email, key):
+	user = None
+	userQuery = User.objects.filter(email = email)
+	if userQuery:
+		user = userQuery[0]
+	userKey = hashlib.sha256(user.password).hexdigest()[:8]
+	if key == userKey:
+		user.is_active = True
+		user.save()
+		Answer.objects.filter(user = user).update(published = True)
+		messages.success(request, 'Account activated! All your answers are now publicly visible.')
+	return HttpResponseRedirect('/')
+
 @csrf_protect
 def answerEdit(request, answer_id):
 	user = request.user
@@ -139,10 +152,15 @@ def question(request, question_id):
 					if answerForm.cleaned_data['newUser'] == u'True':
 						email = answerForm.cleaned_data['email']
 						user, password = createUserFromEmail(email, request)
-						#todo: "you will either need to login or click this link to activate"
+						#todo: convert to a template
+						key = hashlib.sha256(user.password).hexdigest()[:8]
+						activateUrl = 'http://localhost:8000/activate/' + email + '/' + key
+						activateLink = '<a href="%s">Activate your account</a> %s' % (activateUrl, activateUrl)
+						mailBody = """Thanks for signing up with qa site!  Your password is %s
+You will need to activate your account before your answer becomes public.  %s""" % (password, activateLink)
 						send_mail(
 							'Account created',
-							'Thanks for signing up with qa site!  Your password is %s' % password,
+							mailBody,
 							'blake8086@gmail.com',
 							[email],
 							fail_silently = False
@@ -155,7 +173,9 @@ def question(request, question_id):
 						#todo: throw error if not found
 						user = authenticate(username = user.username, password = answerForm.cleaned_data['password'])
 						login(request, user)
+				published = user.is_active
 				Answer.objects.create(
+					published = published,
 					question = question,
 					text = answerForm.cleaned_data['text'],
 					user = user,
@@ -200,13 +220,11 @@ def tos(request):
 
 ###############################################################################
 def createUserFromEmail(email, request):
-	username = hashlib.sha256(email).hexdigest()[:30],
+	username = hashlib.sha256(email).hexdigest()[:30]
 	password = User.objects.make_random_password(8)
-	user = User.objects.create_user(
-		username = username,
-		email = email,
-		password = password
-	)
+	user = User.objects.create_user(username, email, password)
+	user.is_active = False
+	user.save()
 	user = authenticate(username = username, password = password)
 	login(request, user)
 	return (user, password)
