@@ -104,6 +104,11 @@ def loginView(request):
 		user = User.objects.get(email = request.POST['email'])
 		user = authenticate(username = user.username, password = request.POST['password'])
 		if user is not None:
+			if not user.is_active:
+				user.is_active = True
+				user.save()
+				Answer.objects.filter(user = user).update(published = True)
+				messages.success(request, 'Your account has been activated!')
 			login(request, user)
 			messages.success(request, 'Logged in as ' + user.email)
 			return HttpResponseRedirect('/')
