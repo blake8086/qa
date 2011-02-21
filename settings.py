@@ -24,7 +24,7 @@ INSTALLED_APPS = (
 	'django.contrib.admin',
 	'django.contrib.markup',
 	#'django.middleware.csrf.CsrfMiddleware',
-	'main',
+	'qa.main',
 )
 
 from local_settings import *

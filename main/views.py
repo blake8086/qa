@@ -9,7 +9,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.views.decorators.csrf import csrf_protect
-from main.models import Answer, Question
+from qa.main.models import Answer, Question
 from settings import *
 import hashlib
 
