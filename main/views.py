@@ -1,4 +1,4 @@
-from boto.fps.connection import FPSConnection
+from qa.boto.fps.connection import FPSConnection
 from django import forms
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
