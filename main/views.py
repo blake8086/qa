@@ -59,7 +59,7 @@ def ask(request):
 					#todo: "you will either need to login or click this link to activate"
 					send_mail(
 						'Account created',
-						'Thanks for signing up with qa site!  Your password is %s' % password,
+						'Thanks for signing up with %s!  Your password is %s' % (SITE_NAME, password),
 						'blake8086@gmail.com',
 						[email],
 						fail_silently = False
@@ -85,7 +85,7 @@ def ask(request):
 			)
 			url = connection.make_url(
 				returnURL = 'http://www.google.com/',
-				paymentReason = 'Question on [qa site]',
+				paymentReason = 'Question on %s' % SITE_NAME,
 				pipelineName = 'SingleUse',
 				transactionAmount = str(q.price) + '.00',
 			)
@@ -160,9 +160,9 @@ def question(request, question_id):
 						#todo: convert to a template
 						key = hashlib.sha256(user.password).hexdigest()[:8]
 						activateUrl = 'http://' + SITE_DOMAIN + '/activate/' + email + '/' + key
-						mailBody = """Thanks for signing up with qa site!
+						mailBody = """Thanks for signing up with %s!
 Your email is """ + email + """ and your password is %s
-You will need to activate your account before your answer becomes public.  %s""" % (password, activateUrl)
+You will need to activate your account before your answer becomes public.  %s""" % (SITE_NAME, password, activateUrl)
 						send_mail(
 							'Account created',
 							mailBody,
@@ -246,7 +246,7 @@ class LoginForm(forms.Form):
 					('True', 'No, I am a new customer'),
 					('False', 'Yes, I have a password:'),
 				),
-				label = 'Do you have a [qa site] password?',
+				label = 'Do you have a ' + SITE_NAME + ' password?',
 				widget = forms.RadioSelect,
 			)
 			self.fields['email2'] = forms.EmailField(label = 'Confirm email:', required = False)
