@@ -159,10 +159,10 @@ def question(request, question_id):
 						user, password = createUserFromEmail(email, request)
 						#todo: convert to a template
 						key = hashlib.sha256(user.password).hexdigest()[:8]
-						activateUrl = 'http://localhost:8000/activate/' + email + '/' + key
-						activateLink = '<a href="%s">Activate your account</a> %s' % (activateUrl, activateUrl)
-						mailBody = """Thanks for signing up with qa site!  Your password is %s
-You will need to activate your account before your answer becomes public.  %s""" % (password, activateLink)
+						activateUrl = 'http://' + SITE_DOMAIN + '/activate/' + email + '/' + key
+						mailBody = """Thanks for signing up with qa site!
+Your email is """ + email + """ and your password is %s
+You will need to activate your account before your answer becomes public.  %s""" % (password, activateUrl)
 						send_mail(
 							'Account created',
 							mailBody,
