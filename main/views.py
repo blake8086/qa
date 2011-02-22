@@ -91,7 +91,7 @@ def ask(request):
 			)
 			return HttpResponse(url)#HttpResponseRedirect(url)
 	else:
-		questionForm = QuestionForm(user, initial = {'bounty': u'10'})
+		questionForm = QuestionForm(user, initial = {'bounty': u'10', 'newUser': 'True'})
 	return render_to_response('ask.html', {
 		'questionForm': questionForm
 	}, context_instance = RequestContext(request))
@@ -124,7 +124,7 @@ def logoutView(request):
 @csrf_protect
 def question(request, question_id):
 	user = request.user
-	answerForm = AnswerForm(user)
+	answerForm = AnswerForm(user, initial = {'newUser': 'True'})
 	question = Question.objects.get(pk = question_id)
 	is_q = user.is_authenticated() and user == question.user
 	if request.method == 'POST':
@@ -186,6 +186,8 @@ You will need to activate your account before your answer becomes public.  %s"""
 					user = user,
 				)
 				messages.success(request, message)
+				#clear answer form
+				answerForm = AnswerForm(user, initial = {'newUser': 'True'})
 					
 	answers = Answer.objects.filter(question = question)
 	
