@@ -1,0 +1,4 @@
+Thanks for signing up with {{ SITE_NAME }}!
+Your email is {{ email }} and your password is {{ password }}
+You will need to activate your account before your answer becomes public.
+{{ activateUrl }}

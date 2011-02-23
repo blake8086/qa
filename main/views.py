@@ -3,15 +3,27 @@ from django import forms
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
-from django.core.mail import send_mail
+from django.core.mail import EmailMultiAlternatives, send_mail
 from django.db.models import Count
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render_to_response
-from django.template import RequestContext
+from django.template import Context, RequestContext
+from django.template.loader import get_template
 from django.views.decorators.csrf import csrf_protect
 from qa.main.models import Answer, Question
 from settings import *
 import hashlib
+
+
+
+
+
+
+
+
+
+
+
 
 def activate(request, email, key):
 	user = None
@@ -157,19 +169,26 @@ def question(request, question_id):
 					if answerForm.cleaned_data['newUser'] == u'True':
 						email = answerForm.cleaned_data['email']
 						user, password = createUserFromEmail(email, request)
-						#todo: convert to a template
 						key = hashlib.sha256(user.password).hexdigest()[:8]
 						activateUrl = 'http://' + SITE_DOMAIN + '/activate/' + email + '/' + key
-						mailBody = """Thanks for signing up with %s!
-Your email is """ + email + """ and your password is %s
-You will need to activate your account before your answer becomes public.  %s""" % (SITE_NAME, password, activateUrl)
-						send_mail(
-							'Account created',
-							mailBody,
-							'blake8086@gmail.com',
-							[email],
-							fail_silently = False
-						)
+						
+						plaintext = get_template('email/answererSignup.txt')
+						htmly     = get_template('email/answererSignup.html')
+
+						d = Context({
+							'activateUrl': activateUrl,
+							'email': email,
+							'password': password,
+							'SITE_NAME': SITE_NAME,
+						})
+
+						subject = 'Welcome to %s' % SITE_NAME
+						text_content = plaintext.render(d)
+						html_content = htmly.render(d)
+						msg = EmailMultiAlternatives(subject, text_content, 'blake8086@gmail.com', [email])
+						msg.attach_alternative(html_content, "text/html")
+						msg.send()
+
 						#todo: this answer is unpublished initially
 						message = 'Answer saved! You will need to activate your account before your answer becomes public.'
 					else:
