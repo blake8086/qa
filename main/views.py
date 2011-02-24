@@ -57,14 +57,15 @@ def ask(request):
 				if questionForm.cleaned_data['newUser'] == u'True':
 					email = questionForm.cleaned_data['email']
 					user, password = createUserFromEmail(email, request)
-					#todo: "you will either need to login or click this link to activate"
-					send_mail(
-						'Account created',
-						'Thanks for signing up with %s!  Your password is %s' % (SITE_NAME, password),
-						'blake8086@gmail.com',
-						[email],
-						fail_silently = False
-					)
+					key = hashlib.sha256(user.password).hexdigest()[:8]
+					activateUrl = 'http://' + SITE_DOMAIN + '/activate/' + email + '/' + key
+					
+					context = Context({
+						'activateUrl': activateUrl,
+						'password': password,
+						'SITE_NAME': SITE_NAME,
+					})
+					sendTemplateEmail('Account created', email, 'questionerSignup', context)
 				else:
 					email = questionForm.cleaned_data['email']
 					user = User.objects.filter(email = email)[0]
@@ -135,21 +136,13 @@ def question(request, question_id):
 			question.is_answered = True
 			answer.save()
 			question.save()
-			#send email notifications
-			send_mail(
-				'congrats',
-				'your answer was accepted. get money. get paid.',
-				'blake8086@gmail.com',
-				[answer.user.email],
-				fail_silently = False
-			)
-			send_mail(
-				'notification',
-				'you accepted some dude\'s answer',
-				'blake8086@gmail.com',
-				[question.user.email],
-				fail_silently = False
-			)
+
+			context = Context({
+				'answerer': answer.user,
+				'questioner': question.user,
+			})
+			sendTemplateEmail('Congratulations!', answer.user.email, 'answererAccepted', context)
+			sendTemplateEmail('Thanks for your question', question.user.email, 'questionerAccepted', context)
 		else:
 			answerForm = AnswerForm(user, request.POST)
 			if answerForm.is_valid():

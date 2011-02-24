@@ -1,0 +1,3 @@
+Thanks for signing up with {{ SITE_NAME }}!
+Your password is {{ password }}
+{{ activateUrl }}
