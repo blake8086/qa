@@ -14,17 +14,6 @@ from qa.main.models import Answer, Question
 from settings import *
 import hashlib
 
-
-
-
-
-
-
-
-
-
-
-
 def activate(request, email, key):
 	user = None
 	userQuery = User.objects.filter(email = email)
@@ -172,22 +161,13 @@ def question(request, question_id):
 						key = hashlib.sha256(user.password).hexdigest()[:8]
 						activateUrl = 'http://' + SITE_DOMAIN + '/activate/' + email + '/' + key
 						
-						plaintext = get_template('email/answererSignup.txt')
-						htmly     = get_template('email/answererSignup.html')
-
-						d = Context({
+						context = Context({
 							'activateUrl': activateUrl,
 							'email': email,
 							'password': password,
 							'SITE_NAME': SITE_NAME,
 						})
-
-						subject = 'Welcome to %s' % SITE_NAME
-						text_content = plaintext.render(d)
-						html_content = htmly.render(d)
-						msg = EmailMultiAlternatives(subject, text_content, 'blake8086@gmail.com', [email])
-						msg.attach_alternative(html_content, "text/html")
-						msg.send()
+						sendTemplateEmail('Welcome to ' + SITE_NAME, email, 'answererSignup', context)
 
 						#todo: this answer is unpublished initially
 						message = 'Answer saved! You will need to activate your account before your answer becomes public.'
@@ -254,6 +234,16 @@ def createUserFromEmail(email, request):
 	user = authenticate(username = username, password = password)
 	login(request, user)
 	return (user, password)
+
+def sendTemplateEmail(subject, toEmail, templateName, context):
+	plaintext = get_template('email/' + templateName + '.txt')
+	htmly = get_template('email/' + templateName + '.html')
+
+	text_content = plaintext.render(context)
+	html_content = htmly.render(context)
+	msg = EmailMultiAlternatives(subject, text_content, 'blake8086@gmail.com', [toEmail])
+	msg.attach_alternative(html_content, "text/html")
+	msg.send()
 
 class LoginForm(forms.Form):
 	def __init__(self, user, *args, **kwargs):
