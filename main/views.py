@@ -86,12 +86,12 @@ def ask(request):
 				path = '/',
 			)
 			url = connection.make_url(
-				returnURL = 'http://www.google.com/',
+				returnURL = 'http://' + SITE_DOMAIN + '/thanks/' + str(q.id),
 				paymentReason = 'Question on %s' % SITE_NAME,
 				pipelineName = 'SingleUse',
 				transactionAmount = str(q.price) + '.00',
 			)
-			return HttpResponse(url)#HttpResponseRedirect(url)
+			return HttpResponseRedirect(url)
 	else:
 		questionForm = QuestionForm(user, initial = {'bounty': u'10', 'newUser': 'True'})
 	return render_to_response('ask.html', {
@@ -212,6 +212,41 @@ def questions(request):
 	questions = Question.objects.annotate(Count('answer'))
 	return render_to_response('questions.html', {
 		'questions': questions
+	}, context_instance = RequestContext(request))
+
+def thanks(request, question_id):
+	#check if they're authorized
+	#if not, redirect with message
+	#store callerReference number
+	#charge payment
+	connection = FPSConnection(
+		aws_access_key_id = AWS_KEY_ID,
+		aws_secret_access_key = AWS_SECRET_KEY,
+		is_secure = True,
+		host = AMAZON_DOMAIN,
+		path = '/',
+	)
+	print connection.pay(
+		transactionAmount = '10.00',
+		senderTokenId = request.GET['tokenID'],
+		recipientTokenId = None, #
+		callerTokenId = None, #
+		chargeFeeTo = 'Recipient', #
+		callerReference = request.GET['callerReference'],
+		senderReference = None, #
+		recipientReference = None, #
+		senderDescription = None, #
+		recipientDescription = None, #
+		callerDescription = 'A Question', #
+		metadata = None, #
+		transactionDate = None, #
+		reserve = False, #
+	)
+	getVars = request.GET
+	questionId = question_id
+	return render_to_response('thanks.html', {
+		'getVars': getVars,
+		'questionId': questionId,
 	}, context_instance = RequestContext(request))
 	
 def tos(request):
