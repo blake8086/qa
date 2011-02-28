@@ -217,6 +217,7 @@ def questions(request):
 	}, context_instance = RequestContext(request))
 
 def thanks(request, question_id):
+	#verify signature
 	#check if they're authorized
 	#if not, redirect with message
 	#store callerReference number
@@ -228,27 +229,24 @@ def thanks(request, question_id):
 		host = AMAZON_DOMAIN,
 		path = '/',
 	)
-	print connection.pay(
-		transactionAmount = '10.00',
-		senderTokenId = request.GET['tokenID'],
-		recipientTokenId = None, #
-		callerTokenId = None, #
-		chargeFeeTo = 'Recipient', #
+	callerTokenId = connection.install_caller_instruction()
+	recipientTokenId = connection.install_recipient_instruction()
+	#print connection.install_payment_instruction("MyRole=='Caller' orSay 'Roles do not match';")
+	result = connection.pay(
 		callerReference = request.GET['callerReference'],
-		senderReference = None, #
-		recipientReference = None, #
-		senderDescription = None, #
-		recipientDescription = None, #
-		callerDescription = 'A Question', #
-		metadata = None, #
-		transactionDate = None, #
-		reserve = False, #
+		callerTokenId = callerTokenId,
+		#chargeFeeTo = 'Recipient',
+		recipientTokenId = recipientTokenId,
+		#senderDescription = 'A Question',
+		senderTokenId = request.GET['tokenID'],
+		transactionAmount = '10.00',
 	)
 	getVars = request.GET
 	questionId = question_id
 	return render_to_response('thanks.html', {
 		'getVars': getVars,
 		'questionId': questionId,
+		'result': result,
 	}, context_instance = RequestContext(request))
 	
 def tos(request):
