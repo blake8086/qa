@@ -128,6 +128,8 @@ def question(request, question_id):
 	user = request.user
 	answerForm = AnswerForm(user, initial = {'newUser': 'True'})
 	question = Question.objects.get(pk = question_id)
+	question.views += 1
+	question.save()
 	is_q = user.is_authenticated() and user == question.user
 	if request.method == 'POST':
 		if is_q and not question.is_answered:
