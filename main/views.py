@@ -217,11 +217,6 @@ def questions(request):
 	}, context_instance = RequestContext(request))
 
 def thanks(request, question_id):
-	#verify signature
-	#check if they're authorized
-	#if not, redirect with message
-	#store callerReference number
-	#charge payment
 	connection = FPSConnection(
 		aws_access_key_id = AWS_KEY_ID,
 		aws_secret_access_key = AWS_SECRET_KEY,
@@ -229,18 +224,35 @@ def thanks(request, question_id):
 		host = AMAZON_DOMAIN,
 		path = '/',
 	)
+	#verify signature
+	returnUrl = 'http://' + SITE_DOMAIN + '/thanks/' + str(question_id)
+	print connection.verify_signature(returnUrl, request.GET)
+	#check for errors
+	if 'errorMessage' in request.GET:
+		messages.error(request, request.GET['errorMessage'])
+	#check if they're authorized
+	#if not, redirect with message
+	#store callerReference number
+
+	#charge payment
 	callerTokenId = connection.install_caller_instruction()
 	recipientTokenId = connection.install_recipient_instruction()
-	#print connection.install_payment_instruction("MyRole=='Caller' orSay 'Roles do not match';")
 	result = connection.pay(
 		callerReference = request.GET['callerReference'],
 		callerTokenId = callerTokenId,
-		#chargeFeeTo = 'Recipient',
 		recipientTokenId = recipientTokenId,
-		#senderDescription = 'A Question',
 		senderTokenId = request.GET['tokenID'],
 		transactionAmount = '10.00',
 	)
+	
+	print result.TransactionId
+	print result.Status
+	print result.RequestId
+
+	#check result signature
+	#store in db
+	#check for errors
+	#mark as published
 	getVars = request.GET
 	questionId = question_id
 	return render_to_response('thanks.html', {
