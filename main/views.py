@@ -254,7 +254,7 @@ def tos(request):
 
 ###############################################################################
 def createUserFromEmail(email, request):
-	username = hashlib.sha256(email).hexdigest()[:30]
+	username = email
 	password = User.objects.make_random_password(8)
 	user = User.objects.create_user(username, email, password)
 	user.is_active = False

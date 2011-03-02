@@ -1,6 +1,14 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+#patch from http://kfalck.net/2010/12/30/longer-usernames-for-django
+#to give much longer usernames
+from django.contrib.auth.admin import UserAdmin
+User._meta.get_field('username').max_length = 75
+User._meta.get_field('username').validators[0].limit_value = 75
+UserAdmin.form.base_fields['username'].max_length = 75
+UserAdmin.form.base_fields['username'].validators[0].limit_value = 75
+
 class Answer(models.Model):
 	created = models.DateTimeField(auto_now_add = True)
 	deleted = models.BooleanField(default = False)
