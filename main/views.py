@@ -211,12 +211,14 @@ def questionEdit(request, question_id):
 		}, context_instance = RequestContext(request))
 
 def questions(request):
-	questions = Question.objects.annotate(Count('answer'))
+	questions = Question.objects.filter(published = True).annotate(Count('answer'))
 	return render_to_response('questions.html', {
 		'questions': questions
 	}, context_instance = RequestContext(request))
 
 def thanks(request, question_id):
+	question = Question.objects.get(pk = question_id)
+	
 	connection = FPSConnection(
 		aws_access_key_id = AWS_KEY_ID,
 		aws_secret_access_key = AWS_SECRET_KEY,
@@ -226,7 +228,7 @@ def thanks(request, question_id):
 	)
 	#verify signature
 	returnUrl = 'http://' + SITE_DOMAIN + '/thanks/' + str(question_id)
-	print connection.verify_signature(returnUrl, request.GET)
+	print 'verify: ' + str(connection.verify_signature(returnUrl, request.GET))
 	#check for errors
 	if 'errorMessage' in request.GET:
 		messages.error(request, request.GET['errorMessage'])
@@ -242,21 +244,23 @@ def thanks(request, question_id):
 		callerTokenId = callerTokenId,
 		recipientTokenId = recipientTokenId,
 		senderTokenId = request.GET['tokenID'],
-		transactionAmount = '10.00',
+		transactionAmount = str(question.price) + '.00',
 	)
 	
-	print result.TransactionId
-	print result.Status
-	print result.RequestId
-
-	#check result signature
+	payResponse = result.__dict__
+	
 	#store in db
 	#check for errors
-	#mark as published
+	if 'TransactionId' in payResponse:
+		question.published = True
+		question.save()
+		messages.success(request, 'Your question has been published!')
+		return HttpResponseRedirect('/question/' + str(question.id))
 	getVars = request.GET
 	questionId = question_id
 	return render_to_response('thanks.html', {
 		'getVars': getVars,
+		'payResponse': payResponse,
 		'questionId': questionId,
 		'result': result,
 	}, context_instance = RequestContext(request))
