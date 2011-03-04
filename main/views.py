@@ -76,7 +76,6 @@ def ask(request):
 				price = questionForm.cleaned_data['bounty'],
 				user = user,
 			)
-			#todo: get a question slug
 			#redirect to amazon pipeline
 			connection = FPSConnection(
 				aws_access_key_id = AWS_KEY_ID,
@@ -226,36 +225,46 @@ def thanks(request, question_id):
 		host = AMAZON_DOMAIN,
 		path = '/',
 	)
+	
 	#verify signature
 	returnUrl = 'http://' + SITE_DOMAIN + '/thanks/' + str(question_id)
-	print 'verify: ' + str(connection.verify_signature(returnUrl, request.GET))
+	httpParameters = {}
+	for k, v in dict(request.GET).items():
+		httpParameters[k] = v[0]
+	from urllib import urlencode
+	httpParameters = urlencode(httpParameters)
+	print request.GET
+	print 'httpParameters: ' + str(httpParameters)
+	verifyResponse = connection.verify_signature(returnUrl, httpParameters).__dict__
+	print 'verify: ' + str(verifyResponse)
+	
 	#check for errors
 	if 'errorMessage' in request.GET:
 		messages.error(request, request.GET['errorMessage'])
 	#check if they're authorized
-	#if not, redirect with message
-	#store callerReference number
+	if verifyResponse['Status'] == 'Success':
+		#store callerReference number
 
-	#charge payment
-	callerTokenId = connection.install_caller_instruction()
-	recipientTokenId = connection.install_recipient_instruction()
-	result = connection.pay(
-		callerReference = request.GET['callerReference'],
-		callerTokenId = callerTokenId,
-		recipientTokenId = recipientTokenId,
-		senderTokenId = request.GET['tokenID'],
-		transactionAmount = str(question.price) + '.00',
-	)
+		#charge payment
+		callerTokenId = connection.install_caller_instruction()
+		recipientTokenId = connection.install_recipient_instruction()
+		result = connection.pay(
+			callerReference = request.GET['callerReference'],
+			callerTokenId = callerTokenId,
+			recipientTokenId = recipientTokenId,
+			senderTokenId = request.GET['tokenID'],
+			transactionAmount = str(question.price) + '.00',
+		)
 	
-	payResponse = result.__dict__
+		payResponse = result.__dict__
 	
-	#store in db
-	#check for errors
-	if 'TransactionId' in payResponse:
-		question.published = True
-		question.save()
-		messages.success(request, 'Your question has been published!')
-		return HttpResponseRedirect('/question/' + str(question.id))
+		#store in db
+		#check for errors
+		if 'TransactionId' in payResponse:
+			question.published = True
+			question.save()
+			messages.success(request, 'Your question has been published!')
+			return HttpResponseRedirect('/question/' + str(question.id))
 	getVars = request.GET
 	questionId = question_id
 	return render_to_response('thanks.html', {
