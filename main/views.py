@@ -11,7 +11,9 @@ from django.template import Context, RequestContext
 from django.template.loader import get_template
 from django.views.decorators.csrf import csrf_protect
 from qa.main.models import Answer, Question
+from qa.main.models import LogCallerToken, LogPaymentResponse, LogPipelineResponse, LogRecipientToken
 from settings import *
+from urllib import urlencode
 import hashlib
 
 def activate(request, email, key):
@@ -231,7 +233,7 @@ def thanks(request, question_id):
 	httpParameters = {}
 	for k, v in dict(request.GET).items():
 		httpParameters[k] = v[0]
-	from urllib import urlencode
+	LogPipelineResponse.objects.create(question = question, response = str(httpParameters))
 	httpParameters = urlencode(httpParameters)
 	print request.GET
 	print 'httpParameters: ' + str(httpParameters)
@@ -247,7 +249,9 @@ def thanks(request, question_id):
 
 		#charge payment
 		callerTokenId = connection.install_caller_instruction()
+		LogCallerToken.objects.create(question = question, token = str(callerTokenId))
 		recipientTokenId = connection.install_recipient_instruction()
+		LogRecipientToken.objects.create(question = question, token = str(recipientTokenId))
 		result = connection.pay(
 			callerReference = request.GET['callerReference'],
 			callerTokenId = callerTokenId,
@@ -257,10 +261,12 @@ def thanks(request, question_id):
 		)
 	
 		payResponse = result.__dict__
+		LogPaymentResponse.objects.create(question = question, response = str(payResponse))
 	
 		#store in db
 		#check for errors
 		if 'TransactionId' in payResponse:
+			#login account
 			question.published = True
 			question.save()
 			messages.success(request, 'Your question has been published!')

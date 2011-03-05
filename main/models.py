@@ -27,6 +27,30 @@ class Answer(models.Model):
 			check = '_'
 		return u'%d %s %s' % (self.id, check, self.text[:100])
 
+class LogCallerToken(models.Model):
+	created = models.DateTimeField(auto_now_add = True)
+	modified = models.DateTimeField(auto_now = True)
+	question = models.ForeignKey('Question')
+	token = models.TextField()
+
+class LogPaymentResponse(models.Model):
+	created = models.DateTimeField(auto_now_add = True)
+	modified = models.DateTimeField(auto_now = True)
+	question = models.ForeignKey('Question')
+	response = models.TextField()
+
+class LogPipelineResponse(models.Model):
+	created = models.DateTimeField(auto_now_add = True)
+	modified = models.DateTimeField(auto_now = True)
+	question = models.ForeignKey('Question')
+	response = models.TextField()
+
+class LogRecipientToken(models.Model):
+	created = models.DateTimeField(auto_now_add = True)
+	modified = models.DateTimeField(auto_now = True)
+	question = models.ForeignKey('Question')
+	token = models.TextField()
+
 class Question(models.Model):
 	created = models.DateTimeField(auto_now_add = True)
 	deleted = models.BooleanField(default = False)
