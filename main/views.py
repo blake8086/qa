@@ -5,7 +5,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.core.mail import EmailMultiAlternatives, send_mail
 from django.db.models import Count
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, HttpResponseForbidden
 from django.shortcuts import render_to_response
 from django.template import Context, RequestContext
 from django.template.loader import get_template
@@ -129,6 +129,8 @@ def question(request, question_id):
 	user = request.user
 	answerForm = AnswerForm(user, initial = {'newUser': 'True'})
 	question = Question.objects.get(pk = question_id)
+	if question.published == False and user != question.user:
+		return HttpResponseForbidden()
 	question.views += 1
 	question.save()
 	is_q = user.is_authenticated() and user == question.user
