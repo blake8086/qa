@@ -235,18 +235,13 @@ def thanks(request, question_id):
 		httpParameters[k] = v[0]
 	LogPipelineResponse.objects.create(question = question, response = str(httpParameters))
 	httpParameters = urlencode(httpParameters)
-	print request.GET
-	print 'httpParameters: ' + str(httpParameters)
 	verifyResponse = connection.verify_signature(returnUrl, httpParameters).__dict__
-	print 'verify: ' + str(verifyResponse)
 	
 	#check for errors
 	if 'errorMessage' in request.GET:
 		messages.error(request, request.GET['errorMessage'])
 	#check if they're authorized
 	if verifyResponse['Status'] == 'Success':
-		#store callerReference number
-
 		#charge payment
 		callerTokenId = connection.install_caller_instruction()
 		LogCallerToken.objects.create(question = question, token = str(callerTokenId))
@@ -263,13 +258,17 @@ def thanks(request, question_id):
 		payResponse = result.__dict__
 		LogPaymentResponse.objects.create(question = question, response = str(payResponse))
 	
-		#store in db
 		#check for errors
 		if 'TransactionId' in payResponse:
-			#login account
 			question.published = True
 			question.save()
 			messages.success(request, 'Your question has been published!')
+			
+			context = Context({
+				'questioner': question.user,
+			})
+			sendTemplateEmail('Thanks for your order', question.user.email, 'questionerThanks', RequestContext(request))
+			
 			return HttpResponseRedirect('/question/' + str(question.id))
 	getVars = request.GET
 	questionId = question_id
