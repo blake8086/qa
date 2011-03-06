@@ -1,31 +1,37 @@
-<title>{% block title %}{% endblock %}</title>
-<link rel="shortcut icon" href="{{ MEDIA_URL }}/favicon.png" />
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.0/jquery.min.js"></script>
-<div style="float: left">
-	<a href="/">Home</a> | <a href="/ask">Ask a Question</a>
-</div>
-<div style="float: right;">
-	{% if user.email %}
-		{{user.email}} | <a href="/logout">logout</a>
-	{% else %}
-		<form action="/login" method="POST">
-			{% csrf_token %}
-			<label for="email">email:</label> <input type="text" name="email">
-			<label for="password">password:</label> <input type="password" name="password">
-			<input type="submit" value="login">
-		</form>
-	{% endif %}
-</div>
-<div style="clear: both;"></div>
-<div>
-	{% if messages %}
-		<ul class="messages">
-		    {% for message in messages %}
-			    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-		    {% endfor %}
-		</ul>
-	{% endif %}
-</div>
-<div style="clear: both;"></div>
-<br>
-{% block content %}{% endblock %}
+<html>
+	<head>
+		<title>{% block title %}{% endblock %}</title>
+		<link rel="shortcut icon" href="{{ MEDIA_URL }}/favicon.png" />
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.0/jquery.min.js"></script>
+	</head>
+	<body>
+		<div style="float: left">
+			<a href="/">Home</a> | <a href="/ask">Ask a Question</a>
+		</div>
+		<div style="float: right;">
+			{% if user.email %}
+				{{user.email}} | <a href="/logout">logout</a>
+			{% else %}
+				<form action="/login" method="POST">
+					{% csrf_token %}
+					<label for="email">email:</label> <input type="text" name="email">
+					<label for="password">password:</label> <input type="password" name="password">
+					<input type="submit" value="login">
+				</form>
+			{% endif %}
+		</div>
+		<div style="clear: both;"></div>
+		<div>
+			{% if messages %}
+				<ul class="messages">
+				    {% for message in messages %}
+					    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+				    {% endfor %}
+				</ul>
+			{% endif %}
+		</div>
+		<div style="clear: both;"></div>
+		<br>
+		{% block content %}{% endblock %}
+	</body>
+</html>
