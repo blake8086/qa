@@ -5,9 +5,23 @@
 <ul>
 	{% for question in questions %}
 		<li>
-			<h3>{% if question.is_answered %}&#x2713; {% endif %}${{question.price}} <a href="/question/{{question.id}}">{{question.text|truncatewords:5}}</a></h1>
-			{{question.text|markdown}}
-			<i>{{question.answer__count}} answer{{question.answer__count|pluralize}}</i>
+			<table class="questionBox">
+				<tr>
+					<td class="bounty">
+						{% if question.is_answered %}&#x2713;{% endif %}<span class="currencySymbol">$</span><span class="c1">{{ question.price }}</span>
+					</td>
+					<td class="body">
+						<h2>{{ question.text|truncatewords:5 }}</h2>
+						{{ question.text|markdown}}<br>
+						<a href="/question/{{ question.id }}">more &gt;</a><br>
+						<span class="notes">
+							By {{ question.user.email }} &nbsp;
+							{{ question.answer__count }} answer{{ question.answer__count|pluralize }} &nbsp;
+							Asked {{ question.created|timesince }} ago
+						</span>
+					</td>
+				</tr>
+			</table>
 		</li>
 	{% endfor %}
 </ul>
