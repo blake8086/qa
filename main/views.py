@@ -99,9 +99,6 @@ def ask(request):
 		'questionForm': questionForm
 	}, context_instance = RequestContext(request))
 
-def index(request):
-	return render_to_response('index.html', {}, context_instance = RequestContext(request))
-	
 def loginView(request):
 	if request.method == 'POST':
 		user = User.objects.get(email = request.POST['email'])
