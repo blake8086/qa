@@ -272,14 +272,8 @@ def thanks(request, question_id):
 			sendTemplateEmail('Thanks for your order', question.user.email, 'questionerThanks', RequestContext(request))
 			
 			return HttpResponseRedirect('/question/' + str(question.id))
-	getVars = request.GET
-	questionId = question_id
-	return render_to_response('thanks.html', {
-		'getVars': getVars,
-		'payResponse': payResponse,
-		'questionId': questionId,
-		'result': result,
-	}, context_instance = RequestContext(request))
+	messages.error(request, 'A problem occurred when processing your payment, please try again.')
+	return HttpResponseRedirect('/question/' + str(question.id))
 	
 def tos(request):
 	return render_to_response('tos.html', {}, context_instance = RequestContext(request))
