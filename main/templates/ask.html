@@ -33,39 +33,25 @@
 			margin: 12px auto;
 			text-align: center;
 		}
+		ul, li { display: inline; }
+		div.login input { margin: 1em; }
+		ul.errorlist {
+			background-color: #dfd;
+			color: #040;
+		}
 	</style>
 	<form method="post">
    		{{ questionForm.non_field_errors }}
 		<div class="centered">
-    	    {{ questionForm.text.errors }}
-	        {{ questionForm.text.label_tag }}<br>
+			<div>{{ questionForm.text.errors }}</div>
+	        {{ questionForm.text.label_tag }}<br><br>
 	        {{ questionForm.text }}
 		</div>
-		<!--
-		<div class="askBlock" style="width: 200px;">
-			<b>Formatting help</b><br>
-			inline code<br>
-			code block<br>
-			bold<br>
-			link<br>
-			image<br>
-			ol, ul
-		</div>
-		-->
 		<div class="centered">
 	        {{ questionForm.bounty.errors }}
 	        {{ questionForm.bounty.label_tag }}
 	        {{ questionForm.bounty }}
 		</div>
-
-		<style>
-			ul, li {
-				display: inline;
-			}
-			div.login input {
-				margin: 1em;
-			}
-		</style>
 		<div class="askBlock login" style="margin: 12px auto; width: 400px;">
 			<div style="text-align: center;">
 		        {{ questionForm.newUser.errors }}
@@ -73,21 +59,29 @@
 				<br>
 		        {{ questionForm.newUser }}
 			</div>
-			<div>
-		        {{ questionForm.email.errors }}
-		        {{ questionForm.email.label_tag }}
-		        {{ questionForm.email }}
-			</div>
-			<div>
-		        {{ questionForm.email2.errors }}
-		        {{ questionForm.email2.label_tag }}
-		        {{ questionForm.email2 }}
-			</div>
-			<div>
-		        {{ questionForm.password.errors }}
-		        {{ questionForm.password.label_tag }}
-		        {{ questionForm.password }}
-			</div>
+			<table style="margin: 0 auto;">
+				<tr><td colspan="2">
+				        {{ questionForm.email.errors }}
+				</td></tr>
+				<tr>
+					<td style="text-align: right;">{{ questionForm.email.label_tag }}</td>
+					<td>{{ questionForm.email }}</td>
+				</tr>
+				<tr><td colspan="2">
+				        <span class="email2">{{ questionForm.email2.errors }}</span>
+				        <span class="password">{{ questionForm.password.errors }}</span>
+				</td></tr>
+				<tr>
+					<td style="text-align: right;">
+						<span class="email2">{{ questionForm.email2.label_tag }}</span>
+				        <span class="password">{{ questionForm.password.label_tag }}</span>
+					</td>
+					<td>
+				        <span class="email2">{{ questionForm.email2 }}</span>
+				        <span class="password">{{ questionForm.password }}</span>
+					</td>
+				</tr>
+			</table>
 		</div>
 		<div class="centered">
 			By clicking on the button below you are agreeing to code4cheap's <a href="/tos">terms of service</a>.<br>
@@ -98,11 +92,11 @@
 	<script>
 		function showHide() {
 			if ($('input[name=newUser]').attr('checked')) {
-				$('#id_email2').parent().hide();
-				$('#id_password').parent().show();
+				$('.email2').hide();
+				$('.password').show();
 			} else {
-				$('#id_email2').parent().show();
-				$('#id_password').parent().hide();
+				$('.email2').show();
+				$('.password').hide();
 			}
 		}
 		showHide();

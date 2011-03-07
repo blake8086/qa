@@ -2,7 +2,19 @@
 {% load markup %}
 {% block title %}Questions{% endblock %}
 {% block content %}
-<ul>
+	<style>
+		a.ask {
+			background-image: url({{ MEDIA_URL }}/askButton.png);
+			display: block;
+			height: 84px;
+			margin: 12px auto;
+			width: 417px;
+		}
+		a.ask:hover {
+			background-position: center bottom;
+		}
+	</style>
+	<a href="/ask" class="ask"></a>
 	{% for question in questions %}
 		<table class="questionBox">
 			<tr>
@@ -22,5 +34,4 @@
 			</tr>
 		</table>
 	{% endfor %}
-</ul>
 {% endblock %}
