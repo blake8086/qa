@@ -1,20 +1,108 @@
 {% extends "base.html" %}
 {% block title %}Ask a Question{% endblock %}
 {% block content %}
-	<form method="POST">
-		{{ questionForm.as_p }}
-		By clicking on 'I agree' below you are agreeing to the <a href="/tos">Terms of Service</a>.<br>
-		<input type="submit" value="I agree. Post my question" />
-		{% csrf_token %}
+	<style>
+		input, textarea { border: 1px solid #ddd; }
+		textarea {
+			-webkit-border-radius: 7px;
+			-moz-box-shadow: 0 0 5px #888;
+			-webkit-box-shadow: 0 0 5px #888;
+			box-shadow: 0 0 5px #888;
+			background-color: #fff;
+			border: 1px solid #ccc;
+			font-size: 12px;
+			height: 20em;
+			width: 700px;
+		}
+		div.askBlock {
+			-webkit-border-radius: 7px;
+			-moz-box-shadow: 0 0 5px #888;
+			-webkit-box-shadow: 0 0 5px #888;
+			box-shadow: 0 0 5px #888;
+			background-color: #fff;
+			border: 1px solid #ccc;
+			margin: 12px auto;
+			padding: 1em;
+		}
+		div.doubleColumn {
+			margin: 0 auto;
+			width: 960px;
+		}
+		div.doubleColumn div { float: left; }
+		div.centered {
+			margin: 12px auto;
+			text-align: center;
+		}
+	</style>
+	<form method="post">
+   		{{ questionForm.non_field_errors }}
+		<div class="centered">
+    	    {{ questionForm.text.errors }}
+	        {{ questionForm.text.label_tag }}<br>
+	        {{ questionForm.text }}
+		</div>
+		<!--
+		<div class="askBlock" style="width: 200px;">
+			<b>Formatting help</b><br>
+			inline code<br>
+			code block<br>
+			bold<br>
+			link<br>
+			image<br>
+			ol, ul
+		</div>
+		-->
+		<div class="centered">
+	        {{ questionForm.bounty.errors }}
+	        {{ questionForm.bounty.label_tag }}
+	        {{ questionForm.bounty }}
+		</div>
+
+		<style>
+			ul, li {
+				display: inline;
+			}
+			div.login input {
+				margin: 1em;
+			}
+		</style>
+		<div class="askBlock login" style="margin: 12px auto; width: 400px;">
+			<div style="text-align: center;">
+		        {{ questionForm.newUser.errors }}
+				{{ questionForm.newUser.label_tag }}
+				<br>
+		        {{ questionForm.newUser }}
+			</div>
+			<div>
+		        {{ questionForm.email.errors }}
+		        {{ questionForm.email.label_tag }}
+		        {{ questionForm.email }}
+			</div>
+			<div>
+		        {{ questionForm.email2.errors }}
+		        {{ questionForm.email2.label_tag }}
+		        {{ questionForm.email2 }}
+			</div>
+			<div>
+		        {{ questionForm.password.errors }}
+		        {{ questionForm.password.label_tag }}
+		        {{ questionForm.password }}
+			</div>
+		</div>
+		<div class="centered">
+			By clicking on the button below you are agreeing to code4cheap's <a href="/tos">terms of service</a>.<br>
+			{% csrf_token %}
+			<input type="submit" value="Checkout with Amazon Payments" />
+		</div>
 	</form>
 	<script>
 		function showHide() {
 			if ($('input[name=newUser]').attr('checked')) {
-				$('#id_email2').parent().show();
-				$('#id_password').parent().hide();
-			} else {
 				$('#id_email2').parent().hide();
 				$('#id_password').parent().show();
+			} else {
+				$('#id_email2').parent().show();
+				$('#id_password').parent().hide();
 			}
 		}
 		showHide();

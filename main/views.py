@@ -303,10 +303,10 @@ class LoginForm(forms.Form):
 			self.fields['email'] = forms.EmailField(label = 'Email:')
 			self.fields['newUser'] = forms.ChoiceField(
 				choices = (
-					('True', 'No, I am a new customer'),
-					('False', 'Yes, I have a password:'),
+					('False', 'yes'),
+					('True', 'no'),
 				),
-				label = 'Do you have a ' + SITE_NAME + ' password?',
+				label = 'Do you have a code4cheap account?',
 				widget = forms.RadioSelect,
 			)
 			self.fields['email2'] = forms.EmailField(label = 'Confirm email:', required = False)
