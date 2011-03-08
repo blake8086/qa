@@ -1,6 +1,7 @@
-DEBUG = True
-TEMPLATE_DEBUG = DEBUG
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+ADMIN_MEDIA_PREFIX = '/media/'
+AMAZON_DOMAIN = 'fps.sandbox.amazonaws.com'
+AWS_KEY_ID = 'AKIAJJSGY3AIETRPFIZA'
+AWS_SECRET_KEY = ''
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
@@ -11,16 +12,15 @@ DATABASES = {
         'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
     }
 }
-SITE_NAME = 'Blake\'s Q/A Site (beta)'
-SITE_DOMAIN = 'localhost:8000'
+DEBUG = True
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 MEDIA_ROOT = ''
 MEDIA_URL = ''
-ADMIN_MEDIA_PREFIX = '/media/'
-SECRET_KEY = ''
 MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
+SECRET_KEY = ''
+SITE_DOMAIN = 'localhost:8000'
+SITE_NAME = 'code4cheap'
+TEMPLATE_DEBUG = DEBUG
 TEMPLATE_DIRS = (
 	'/absolute/path/to/templates'
 )
-AMAZON_DOMAIN = 'authorize.payments-sandbox.amazon.com'
-AWS_KEY_ID = 'AKIAJJSGY3AIETRPFIZA'
-AWS_SECRET_KEY = ''
