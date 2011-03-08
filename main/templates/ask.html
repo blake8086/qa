@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %}Ask a Question{% endblock %}
+{% block title %}ask - code4cheap{% endblock %}
 {% block content %}
 	<style>
 		input, textarea { border: 1px solid #ddd; }
@@ -52,40 +52,43 @@
 	        {{ questionForm.bounty.label_tag }}
 	        {{ questionForm.bounty }}
 		</div>
-		<div class="askBlock login" style="margin: 12px auto; width: 400px;">
-			<div style="text-align: center;">
-		        {{ questionForm.newUser.errors }}
-				{{ questionForm.newUser.label_tag }}
-				<br>
-		        {{ questionForm.newUser }}
+		{% if questionForm.newUser %}
+			<div class="askBlock login" style="margin: 12px auto; width: 400px;">
+				<div style="text-align: center;">
+			        {{ questionForm.newUser.errors }}
+					{{ questionForm.newUser.label_tag }}
+					<br>
+			        {{ questionForm.newUser }}
+				</div>
+				<table style="margin: 0 auto;">
+					<tr><td colspan="2">
+					        {{ questionForm.email.errors }}
+					</td></tr>
+					<tr>
+						<td style="text-align: right;">{{ questionForm.email.label_tag }}</td>
+						<td>{{ questionForm.email }}</td>
+					</tr>
+					<tr><td colspan="2">
+					        <span class="email2">{{ questionForm.email2.errors }}</span>
+					        <span class="password">{{ questionForm.password.errors }}</span>
+					</td></tr>
+					<tr>
+						<td style="text-align: right;">
+							<span class="email2">{{ questionForm.email2.label_tag }}</span>
+					        <span class="password">{{ questionForm.password.label_tag }}</span>
+						</td>
+						<td>
+					        <span class="email2">{{ questionForm.email2 }}</span>
+					        <span class="password">{{ questionForm.password }}</span>
+						</td>
+					</tr>
+				</table>
 			</div>
-			<table style="margin: 0 auto;">
-				<tr><td colspan="2">
-				        {{ questionForm.email.errors }}
-				</td></tr>
-				<tr>
-					<td style="text-align: right;">{{ questionForm.email.label_tag }}</td>
-					<td>{{ questionForm.email }}</td>
-				</tr>
-				<tr><td colspan="2">
-				        <span class="email2">{{ questionForm.email2.errors }}</span>
-				        <span class="password">{{ questionForm.password.errors }}</span>
-				</td></tr>
-				<tr>
-					<td style="text-align: right;">
-						<span class="email2">{{ questionForm.email2.label_tag }}</span>
-				        <span class="password">{{ questionForm.password.label_tag }}</span>
-					</td>
-					<td>
-				        <span class="email2">{{ questionForm.email2 }}</span>
-				        <span class="password">{{ questionForm.password }}</span>
-					</td>
-				</tr>
-			</table>
-		</div>
+		{% endif %}
 		<div class="centered">
 			By clicking on the button below you are agreeing to code4cheap's <a href="/tos">terms of service</a>.<br>
 			{% csrf_token %}
+			<img src="https://images-na.ssl-images-amazon.com/images/G/01/asp/beige_medium_paynow_withlogo_lightbg.gif"><br>
 			<input type="submit" value="Checkout with Amazon Payments" />
 		</div>
 	</form>
