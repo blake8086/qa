@@ -53,3 +53,8 @@ input[type=submit] {
 	border: default;
 	font-family: 'Tahoma', sans-serif;
 }
+div#footer {
+	margin: 1em auto;
+	text-align: center;
+	width: 800px;
+}
