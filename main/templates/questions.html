@@ -19,7 +19,7 @@
 		<table class="questionBox">
 			<tr>
 				<td class="bounty">
-					{% if question.is_answered %}&#x2713;{% endif %}<span class="currencySymbol">$</span><span class="c1">{{ question.price }}</span>
+					<span class="currencySymbol">$</span><span class="c1">{{ question.price }}</span>
 				</td>
 				<td class="body">
 					<h2>{{ question.text|truncatewords:5 }}</h2>

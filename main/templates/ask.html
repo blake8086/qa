@@ -39,6 +39,11 @@
 			background-color: #dfd;
 			color: #040;
 		}
+		button[type=submit] {
+			background-color: transparent;
+			cursor: pointer;
+		}
+		button[type=submit]:hover { opacity: 0.9; }
 	</style>
 	<form method="post">
    		{{ questionForm.non_field_errors }}
@@ -88,8 +93,10 @@
 		<div class="centered">
 			By clicking on the button below you are agreeing to code4cheap's <a href="/tos">terms of service</a>.<br>
 			{% csrf_token %}
-			<img src="https://images-na.ssl-images-amazon.com/images/G/01/asp/beige_medium_paynow_withlogo_lightbg.gif"><br>
-			<input type="submit" value="Checkout with Amazon Payments" />
+			<br>
+			<button type="submit" alt="Checkout with Amazon">
+				<img src="{{ MEDIA_URL }}amazonPayNow.gif">
+			</button>
 		</div>
 	</form>
 	<script>

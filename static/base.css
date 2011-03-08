@@ -33,9 +33,10 @@ td.bounty {
 	font-size: 68px;
 	height: 68px;
 	padding: 12px;
+	text-align: center;
 	width: 124px;
 }
-span.c1, span.c2, span.c3, span.currencySymbol { font-family: "Tahoma"; }
+span.c1, span.currencySymbol { font-family: "Tahoma"; }
 span.c1 { font-size: 68px; }
 span.currencySymbol {
 	font-size: 50%;
