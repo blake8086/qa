@@ -19,7 +19,6 @@ MEDIA_URL = ''
 MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
 SECRET_KEY = ''
 SITE_DOMAIN = 'localhost:8000'
-SITE_NAME = 'code4cheap'
 TEMPLATE_DEBUG = DEBUG
 TEMPLATE_DIRS = (
 	'/absolute/path/to/templates'

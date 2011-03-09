@@ -65,7 +65,6 @@ def ask(request):
 					context = Context({
 						'activateUrl': activateUrl,
 						'password': password,
-						'SITE_NAME': SITE_NAME,
 					})
 					sendTemplateEmail('Account created', email, 'questionerSignup', context)
 				else:
@@ -88,7 +87,7 @@ def ask(request):
 			)
 			url = connection.make_url(
 				returnURL = 'http://' + SITE_DOMAIN + '/thanks/' + str(q.id),
-				paymentReason = 'Question on %s' % SITE_NAME,
+				paymentReason = 'Question on code4cheap',
 				pipelineName = 'SingleUse',
 				transactionAmount = str(q.price) + '.00',
 			)
@@ -160,9 +159,8 @@ def question(request, question_id):
 							'activateUrl': activateUrl,
 							'email': email,
 							'password': password,
-							'SITE_NAME': SITE_NAME,
 						})
-						sendTemplateEmail('Welcome to ' + SITE_NAME, email, 'answererSignup', context)
+						sendTemplateEmail('Welcome to code4cheap', email, 'answererSignup', context)
 
 						#todo: this answer is unpublished initially
 						message = 'Answer saved! You will need to activate your account before your answer becomes public.'
