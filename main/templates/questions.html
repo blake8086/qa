@@ -13,6 +13,14 @@
 		a.ask:hover {
 			background-position: center bottom;
 		}
+		div.questionText {
+			height: 7em;
+			overflow: hidden;
+		}
+		td.body p:first-child:first-line {
+			font-size: 200%;
+			line-height: 150%;
+		}
 	</style>
 	<a href="/ask" class="ask"></a>
 	{% for question in questions %}
@@ -22,9 +30,10 @@
 					<span class="currencySymbol">$</span><span class="c1">{{ question.price }}</span>
 				</td>
 				<td class="body">
-					<h2>{{ question.text|truncatewords:5 }}</h2>
-					{{ question.text|markdown}}<br>
-					<a href="/question/{{ question.id }}">more &gt;</a><br>
+					<div class="questionText">
+						{{ question.text|markdown }}
+					</div>
+					<p style="text-align: right"><a href="/question/{{ question.id }}">more &gt;</a></p>
 					<span class="notes">
 						By {{ question.user.email }} &nbsp;
 						{{ question.answer__count }} answer{{ question.answer__count|pluralize }} &nbsp;
