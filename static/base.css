@@ -12,6 +12,10 @@ div#header {
 	text-align: center;
 	width: 100%;
 }
+div.message { background-color: yellow;}
+div.message.success { color: #000;}
+div.message.warning { color: #400;}
+div.message.error { color: #800;}
 div#shadowSeparator {
 	height: 16px;
 	width: 100%;

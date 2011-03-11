@@ -7,21 +7,6 @@
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.0/jquery.min.js"></script>
 	</head>
 	<body>
-		<!--
-		<div style="float: right;">
-		</div>
-		<div style="clear: both;"></div>
-		<div>
-			{% if messages %}
-				<ul class="messages">
-				    {% for message in messages %}
-					    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-				    {% endfor %}
-				</ul>
-			{% endif %}
-		</div>
-		<div style="clear: both;"></div>
-		-->
 		<div id="header">
 			<table style="width: 100%;"><tr>
 			<td width="33.3%"></td>
@@ -40,6 +25,16 @@
 			</td>
 			</tr></table>
 		</div>
+		{% if messages %}
+		    {% for message in messages %}
+			    <div class="message {{ message.tags }}">{{ message }}</div>
+		    {% endfor %}
+		{% endif %}
+		<script>
+			$('div.message').click(function() {
+				$(this).slideUp();
+			})
+		</script>
 		<div id="shadowSeparator"></div>
 		<div id="content">
 			{% block content %}{% endblock %}
