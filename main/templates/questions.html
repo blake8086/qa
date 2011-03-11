@@ -24,8 +24,8 @@
 	</style>
 	<a href="/ask" class="ask"></a>
 	{% for question in questions %}
-		<table id="{{ question.id }}" class="questionBox">
-			<a href="/question/{{ question.id }}">
+	<a href="/question/{{ question.id }}">
+		<table class="questionBox">
 			<tr>
 				<td class="bounty">
 					<span class="currencySymbol">$</span><span class="c1">{{ question.price }}</span>
@@ -41,7 +41,7 @@
 					</span>
 				</td>
 			</tr>
-			</a>
 		</table>
+	</a>
 	{% endfor %}
 {% endblock %}
