@@ -24,7 +24,8 @@
 	</style>
 	<a href="/ask" class="ask"></a>
 	{% for question in questions %}
-		<table class="questionBox">
+		<table id="{{ question.id }}" class="questionBox">
+			<a href="/question/{{ question.id }}">
 			<tr>
 				<td class="bounty">
 					<span class="currencySymbol">$</span><span class="c1">{{ question.price }}</span>
@@ -33,7 +34,6 @@
 					<div class="questionText">
 						{{ question.text|markdown }}
 					</div>
-					<p style="text-align: right"><a href="/question/{{ question.id }}">more &gt;</a></p>
 					<span class="notes">
 						By {{ question.user.email }} &nbsp;
 						{{ question.answer__count }} answer{{ question.answer__count|pluralize }} &nbsp;
@@ -41,6 +41,7 @@
 					</span>
 				</td>
 			</tr>
+			</a>
 		</table>
 	{% endfor %}
 {% endblock %}

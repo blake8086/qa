@@ -21,11 +21,15 @@ table.questionBox {
 	-moz-box-shadow: 0 0 5px #888;
 	-webkit-box-shadow: 0 0 5px #888;
 	box-shadow: 0 0 5px #888;
-	background-color: #fff;
+	background-color: #f8f8f8;
 	border: 1px solid #ccc;
 	margin: 18px auto;
 	min-height: 10em;
 	width: 720px;
+}
+table.questionBox:hover {
+	background-color: #fff;
+	cursor: pointer;
 }
 td.bounty {
 	color: #f79939;
@@ -47,7 +51,6 @@ span.notes {
 	color: gray;
 	font-size: 75%;
 }
-label {	 }
 input, textarea { font-family: 'Monaco', 'Lucida Console', sans-serif; }
 input[type=submit] {
 	border: default;
