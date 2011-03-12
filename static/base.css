@@ -55,7 +55,11 @@ span.notes {
 	color: gray;
 	font-size: 75%;
 }
-input, textarea { font-family: 'Monaco', 'Lucida Console', sans-serif; }
+input, textarea {
+	font-family: 'Monaco', 'Lucida Console', sans-serif;
+	font-size: 16px;
+}
+select { font-size: 16px; }
 input[type=submit] {
 	border: default;
 	font-family: 'Tahoma', sans-serif;

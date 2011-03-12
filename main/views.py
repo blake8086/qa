@@ -336,10 +336,10 @@ class LoginForm(forms.Form):
 		return password
 
 class AnswerForm(LoginForm):
-	text = forms.CharField(label = 'My Answer:', widget = forms.Textarea)
+	text = forms.CharField(label = 'Your Answer:', widget = forms.Textarea)
 
 class QuestionForm(LoginForm):
-	text = forms.CharField(label = 'My Question:', widget = forms.Textarea)
+	text = forms.CharField(label = 'Your Question:', widget = forms.Textarea)
 	bounty = forms.CharField(label = 'Bounty for a correct answer:', widget = forms.Select(choices = (
 		('1', '$1.00'), ('2', '$2.00'), ('3', '$3.00'), ('5', '$5.00'),
 		('10', '$10.00'), ('15', '$15.00'), ('20', '$20.00'), ('25', '$25.00'),
