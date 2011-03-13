@@ -1,13 +1,10 @@
-{% load django_static %}
 <html>
 	<head>
 		<title>{% block title %}{% endblock %}</title>
 		<link rel="shortcut icon" href="{{ MEDIA_URL }}favicon.png" />
 		<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/3.3.0/build/cssreset/reset-min.css">
 		<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/3.3.0/build/cssfonts/fonts-min.css">
-		{% slimall %}
-			<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/base.css" />
-		{% endslimall %}
+		<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/base.css" />
 		<style>div#shadowSeparator { background-image:url({{ MEDIA_URL }}images/shadow.png); }</style>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.0/jquery.min.js"></script>
 	</head>
@@ -36,11 +33,9 @@
 		    {% endfor %}
 		{% endif %}
 		<script>
-		{% slimcontent %}
 			$('div.message').click(function() {
 				$(this).slideUp();
 			})
-		{% endslimcontent %}
 		</script>
 		<div id="shadowSeparator"></div>
 		<div id="content">

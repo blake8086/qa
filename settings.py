@@ -24,10 +24,7 @@ INSTALLED_APPS = (
 	'django.contrib.messages',
 	'django.contrib.admin',
 	'django.contrib.markup',
-	'django_static',
 	'qa.main',
 )
-
-DJANGO_STATIC = True
 
 from local_settings import *
