@@ -1,0 +1,30 @@
+* {
+	border: 0px solid transparent;
+	margin: 0;
+	padding: 0;
+}
+body {
+	background-color: #f1f0ec;
+	font-family: Trebuchet, sans-serif;
+	line-height: 1.25em;
+}
+div#header {
+	background-color: #4970af;
+	height: 120px;
+	text-align: center;
+	width: 100%;
+}
+div.message { background-color: yellow;}
+div.message.success { color: #000;}
+div.message.warning { color: #400;}
+div.message.error { color: #800;}
+div#shadowSeparator {
+	height: 16px;
+	width: 100%;
+}
+
+div#footer {
+	margin: 1em auto;
+	text-align: center;
+	width: 800px;
+}

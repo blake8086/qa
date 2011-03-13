@@ -4,7 +4,7 @@
 {% block content %}
 	<style>
 		a.ask {
-			background-image: url({{ MEDIA_URL }}/askButton.png);
+			background-image: url({{ MEDIA_URL }}images/askButton.png);
 			display: block;
 			height: 84px;
 			margin: 12px auto;
@@ -22,6 +22,7 @@
 			line-height: 150%;
 		}
 	</style>
+	<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/questions.css" />
 	<a href="/ask" class="ask"></a>
 	{% for question in questions %}
 	<a href="/question/{{ question.id }}">
