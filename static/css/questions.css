@@ -10,26 +10,31 @@ table.questionBox {
 	width: 720px;
 }
 table.questionBox:hover {
+	-moz-box-shadow: 0 0 5px #999;
+	-webkit-box-shadow: 0 0 5px #999;
+	box-shadow: 0 0 5px #999;
 	background-color: #fff;
 	cursor: pointer;
 }
 td.bounty {
 	color: #f79939;
 	float: left;
-	font-size: 68px;
 	height: 68px;
 	padding: 12px;
 	text-align: center;
 	width: 124px;
 }
 span.c1, span.currencySymbol { font-family: "Tahoma"; }
-span.c1 { font-size: 68px; }
+span.c1 { font-size: 524%; }
 span.currencySymbol {
-	font-size: 50%;
+	font-size: 262%;
 	vertical-align: top;
 }
-td.body { padding: 12px; }
+td.body {
+	font-size: 123.1%;
+	padding: 12px;
+}
 span.notes {
 	color: gray;
-	font-size: 75%;
+	font-size: 93%;
 }
