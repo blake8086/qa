@@ -1,8 +1,11 @@
+{% load django_static %}
 <html>
 	<head>
 		<title>{% block title %}{% endblock %}</title>
 		<link rel="shortcut icon" href="{{ MEDIA_URL }}favicon.png" />
+		{% slimall %}
 		<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}base.css" />
+		{% endslimall %}
 		<style>div#shadowSeparator { background-image:url({{ MEDIA_URL }}shadow.png); }</style>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.0/jquery.min.js"></script>
 	</head>
@@ -31,9 +34,11 @@
 		    {% endfor %}
 		{% endif %}
 		<script>
+		{% slimcontent %}
 			$('div.message').click(function() {
 				$(this).slideUp();
 			})
+		{% endslimcontent %}
 		</script>
 		<div id="shadowSeparator"></div>
 		<div id="content">

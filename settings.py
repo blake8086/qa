@@ -15,6 +15,7 @@ MIDDLEWARE_CLASSES = (
 	'django.contrib.messages.middleware.MessageMiddleware',
 )
 ROOT_URLCONF = 'qa.urls'
+
 INSTALLED_APPS = (
 	'django.contrib.auth',
 	'django.contrib.contenttypes',
@@ -23,7 +24,10 @@ INSTALLED_APPS = (
 	'django.contrib.messages',
 	'django.contrib.admin',
 	'django.contrib.markup',
+	'django_static',
 	'qa.main',
 )
+
+DJANGO_STATIC = True
 
 from local_settings import *
