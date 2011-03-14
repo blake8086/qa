@@ -2,56 +2,155 @@
 {% load markup %}
 {% block title %}QA: {{question.text|truncatewords:5}}{% endblock %}
 {% block content %}
-	{% if question.is_answered %}&#x2713; {% endif %}${{question.price}}<br>
-	<br>
-	{{question.user.email}}:<br>
-	<br>
-	{{question.text|markdown}}<br>
-	{% if is_q %}
-		<a href="/question/{{question.id}}/edit">edit your question</a><br>
-	{% endif %}
-	<br>
-	Answers:
-	{% for answer in answers %}
-		{% if answer.published or answer.user == user %}
-			<hr>
-			{% if is_q and not answer.is_winner and not question.is_answered %}
-				<form method="POST">
-					{% csrf_token %}
-					<input type="hidden" name="answer" value="{{answer.id}}">
-					<input type="submit" value="Mark this answer as correct"><br>
-				</form>
-			{% endif %}
-			{% if answer.is_winner %}&#x2713; {% endif %}{{answer.user.email}}:<br>
-			{{answer.text|markdown}}<br>
-			{% if answer.user == user %}
-				{% if not answer.published %}
-					<i>This answer is not yet public, please activate your account to make it public.</i>
+	<style>
+		body {
+			font-size: 108%;
+			line-height: 1.25em;
+		}
+		div.column {
+			margin: 0px auto;
+			width: 900px;
+		}
+		div.shadowBox, #id_text {
+			-webkit-border-radius: 7px;
+			-moz-box-shadow: 0 0 5px #888;
+			-webkit-box-shadow: 0 0 5px #888;
+			box-shadow: 0 0 5px #888;
+			background-color: #f8f8f8;
+			border: 1px solid #ccc;
+			padding: 10px;
+		}
+		div.question {
+			margin: 30px auto;
+		}
+		div.question div.info {
+			float: left;
+			width: 150px;
+		}
+		div.question span.bounty {
+			color: #f79939;
+			font-family: Tahoma;
+			font-size: 524%;
+			line-height: 1em;
+		}
+		div.question span.bounty span.currencySymbol {
+			font-family: "Tahoma";
+			font-size: 50%;
+			vertical-align: text-top;
+		}
+		div.question div.body {
+			float: right;
+			width: 700px;
+		}
+		div#answererTeaser {
+			color: #525252;
+			font-size: 197%;
+			line-height: 1em;
+			margin: 0 auto;
+			text-align: center;
+		}
+		a.ask {
+			background-image: url({{ MEDIA_URL }}images/askButton.png);
+			display: block;
+			height: 84px;
+			margin: 12px auto;
+			width: 417px;
+		}
+		a.ask:hover {
+			background-position: center bottom;
+		}
+		div.answer {
+			margin: 40px auto;
+		}
+		div.answer div.body {
+			font-size: 123.1%;
+			padding: 12px;
+		}
+		div.answer div.notes {
+			color: gray;
+			font-size: 93%;
+		}
+		form ul, form li {
+			display: inline;
+		}
+	</style>
+	<div class="column">
+		<div class="question">
+			<div class="info">
+				<p><span class="bounty"><span class="currencySymbol">$</span>{{question.price}}</span></p>
+				{% if question.is_answered %}<p>&#x2713;</p>{% endif %}
+				<p>{{ question.user.email }}</p>
+			</div>
+			<div class="body shadowBox">
+				{{question.text|markdown}}
+				{% if is_q %}
+					<p><a href="/question/{{question.id}}/edit">edit your question</a></p>
 				{% endif %}
-				<a href="/answer/{{answer.id}}/edit">edit my answer</a><br>
-			{% endif %}
+			</div>
+			<div style="clear: both;"></div>
+		</div>
+		{% if not is_q and not question.is_answered %}
+			<div id="answererTeaser">
+				<p>Get <span style="color: #f79939; font-weight: bold;">${{ question.price }}</span> for posting the best answer!*</p>
+				<p><a href="#" class="ask"></a></p>
+				<p>*minus service fee</p>
+			</div>
 		{% endif %}
-	{% endfor %}
-	<hr>
-	{% if not is_q %}
-		<form method="POST">
-			{{ answerForm.as_p }}
-			By clicking on 'I agree' below you are agreeing to the <a href="/tos">Terms of Service</a>.<br>
-			<input type="submit" value="I agree. Post my answer" />
-			{% csrf_token %}
-		</form>
-		<script>
-			function showHide() {
-				if ($('input[name=newUser]').attr('checked')) {
-					$('#id_email2').parent().show();
-					$('#id_password').parent().hide();
-				} else {
-					$('#id_email2').parent().hide();
-					$('#id_password').parent().show();
+		{% for answer in answers %}
+			{% if answer.published or answer.user == user %}
+				<div class="answer shadowBox">
+					{% if is_q and not answer.is_winner and not question.is_answered %}
+						<form method="POST">
+							{% csrf_token %}
+							<input type="hidden" name="answer" value="{{answer.id}}">
+							<input type="submit" value="Mark this answer as correct"><br>
+						</form>
+					{% endif %}
+					{% if answer.is_winner %}&#x2713; {% endif %}{{answer.user.email}}:<br>
+					{{answer.text|markdown}}<br>
+					{% if answer.user == user %}
+						{% if not answer.published %}
+							<i>This answer is not yet public, please activate your account to make it public.</i>
+						{% endif %}
+						<a href="/answer/{{answer.id}}/edit">edit your answer</a><br>
+					{% endif %}
+				</div>
+			{% endif %}
+		{% endfor %}
+		{% if not is_q %}
+			<form method="POST">
+				<p>{{ answerForm.text.errors }}</p>
+				<p>{{ answerForm.text.label_tag }}</p>
+				<p>{{ answerForm.text }}</p>
+
+				<p>{{ answerForm.email.errors }}</p>
+				<p>{{ answerForm.email.label_tag }} {{ answerForm.email }}</p>
+
+				<p>{{ answerForm.newUser.errors }}</p>
+				<p>{{ answerForm.newUser.label_tag }}</p>
+				<p>{{ answerForm.newUser }}</p>
+
+				<p>{{ answerForm.email2.errors }}</p>
+				<p>{{ answerForm.password.errors }}</p>
+				<p>{{ answerForm.email2.label_tag }} {{ answerForm.email2 }}</p>
+				<p>{{ answerForm.password.label_tag }} {{ answerForm.password }}</p>
+				By clicking on 'I agree' below you are agreeing to the <a href="/tos">Terms of Service</a>.<br>
+				<input type="submit" value="I agree. Post my answer" />
+				{% csrf_token %}
+			</form>
+			<script>
+				function showHide() {
+					if ($('input[name=newUser]').attr('checked')) {
+						$('#id_email2').parent().hide();
+						$('#id_password').parent().show();
+					} else {
+						$('#id_email2').parent().show();
+						$('#id_password').parent().hide();
+					}
 				}
-			}
-			showHide();
-			$('#id_newUser_0,#id_newUser_1').live('click', showHide);
-		</script>
-	{% endif %}
+				showHide();
+				$('#id_newUser_0,#id_newUser_1').live('click', showHide);
+			</script>
+		{% endif %}
+	</div>
 {% endblock %}
