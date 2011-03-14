@@ -70,8 +70,16 @@
 			color: gray;
 			font-size: 93%;
 		}
-		form ul, form li {
-			display: inline;
+		#id_text {
+			margin: 10px 0px;
+			width: 900px;
+		}
+		ul.errorlist {
+			background-color: #dfd;
+			color: #040;
+		}
+		form#answer p {
+			margin: 1em 0;
 		}
 	</style>
 	<div class="column">
@@ -95,33 +103,20 @@
 				<p><a href="#" class="ask"></a></p>
 				<p>*minus service fee</p>
 			</div>
+			<script>
+				$('div#answererTeaser').click(function(event) {
+					$(this).slideUp();
+					$('form#answer').slideToggle();
+					return false;
+				})
+			</script>
 		{% endif %}
-		{% for answer in answers %}
-			{% if answer.published or answer.user == user %}
-				<div class="answer shadowBox">
-					{% if is_q and not answer.is_winner and not question.is_answered %}
-						<form method="POST">
-							{% csrf_token %}
-							<input type="hidden" name="answer" value="{{answer.id}}">
-							<input type="submit" value="Mark this answer as correct"><br>
-						</form>
-					{% endif %}
-					{% if answer.is_winner %}&#x2713; {% endif %}{{answer.user.email}}:<br>
-					{{answer.text|markdown}}<br>
-					{% if answer.user == user %}
-						{% if not answer.published %}
-							<i>This answer is not yet public, please activate your account to make it public.</i>
-						{% endif %}
-						<a href="/answer/{{answer.id}}/edit">edit your answer</a><br>
-					{% endif %}
-				</div>
-			{% endif %}
-		{% endfor %}
-		{% if not is_q %}
-			<form method="POST">
+		{% if not is_q and not question.is_answered %}
+			<form id="answer" method="POST" style="display: none;">
+		   		<p>{{ answerForm.non_field_errors }}</p>
 				<p>{{ answerForm.text.errors }}</p>
-				<p>{{ answerForm.text.label_tag }}</p>
-				<p>{{ answerForm.text }}</p>
+				<p>{{ answerForm.text.label_tag }}<br>
+				{{ answerForm.text }}</p>
 
 				<p>{{ answerForm.email.errors }}</p>
 				<p>{{ answerForm.email.label_tag }} {{ answerForm.email }}</p>
@@ -152,5 +147,26 @@
 				$('#id_newUser_0,#id_newUser_1').live('click', showHide);
 			</script>
 		{% endif %}
+		{% for answer in answers %}
+			{% if answer.published or answer.user == user %}
+				<div class="answer shadowBox">
+					{% if is_q and not answer.is_winner and not question.is_answered %}
+						<form method="POST">
+							{% csrf_token %}
+							<input type="hidden" name="answer" value="{{answer.id}}">
+							<input type="submit" value="Mark this answer as correct"><br>
+						</form>
+					{% endif %}
+					{% if answer.is_winner %}&#x2713; {% endif %}{{answer.user.email}}:<br>
+					{{answer.text|markdown}}<br>
+					{% if answer.user == user %}
+						{% if not answer.published %}
+							<i>This answer is not yet public, please activate your account to make it public.</i>
+						{% endif %}
+						<a href="/answer/{{answer.id}}/edit">edit your answer</a><br>
+					{% endif %}
+				</div>
+			{% endif %}
+		{% endfor %}
 	</div>
 {% endblock %}
