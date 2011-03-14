@@ -34,7 +34,9 @@ td.body {
 	font-size: 123.1%;
 	padding: 12px;
 }
-span.notes {
+div.notes {
 	color: gray;
 	font-size: 93%;
+	margin-top: 1em;
+	text-align: center;
 }

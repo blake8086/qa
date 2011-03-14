@@ -18,8 +18,8 @@
 			overflow: hidden;
 		}
 		td.body p:first-child:first-line {
-			font-size: 200%;
-			line-height: 150%;
+			font-size: 150%;
+			line-height: 125%;
 		}
 	</style>
 	<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/questions.css" />
@@ -35,11 +35,11 @@
 					<div class="questionText">
 						{{ question.text|markdown }}
 					</div>
-					<span class="notes">
-						By {{ question.user.email }} &nbsp;
+					<div class="notes">
+						by {{ question.user.email }} &nbsp;
 						{{ question.answer__count }} answer{{ question.answer__count|pluralize }} &nbsp;
-						Asked {{ question.created|timesince }} ago
-					</span>
+						asked {{ question.created|timesince }} ago
+					</div>
 				</td>
 			</tr>
 		</table>
