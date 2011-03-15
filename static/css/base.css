@@ -19,7 +19,7 @@ div#shadowSeparator {
 }
 
 div#footer {
-	margin: 1em auto;
+	margin: 1em auto 0 auto;
 	text-align: center;
 	width: 800px;
 }
