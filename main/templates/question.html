@@ -47,8 +47,9 @@
 			margin: 1em 0;
 			overflow: auto;
 			padding: 1em;
-			width: 850px;
 		}
+		div.question pre { width: 670px;}
+		div.answer pre { width: 850px;}
 		div.question code, div.answer code {
 			font-family: 'Consolas', 'Monaco', 'Lucida Console', 'Courier New', monospace;
 			line-height: 1.25em;
@@ -109,22 +110,22 @@
 			</div>
 			<div style="clear: both;"></div>
 		</div>
-		{% if not is_q and not question.is_answered %}
+		{% if not is_q and not question.is_answered and not is_postback %}
 			<div id="answererTeaser">
 				<p>Get <span style="color: #f79939; font-weight: bold;">${{ question.price }}</span> for posting the best answer!*</p>
 				<p><a href="#" class="ask"></a></p>
 				<p>*minus service fee</p>
 			</div>
 			<script>
-				$('div#answererTeaser').click(function(event) {
-					$(this).slideUp();
+				$('div#answererTeaser a.ask').click(function(event) {
+					$('div#answererTeaser').slideUp();
 					$('form#answer').slideToggle();
 					return false;
 				})
 			</script>
 		{% endif %}
 		{% if not is_q and not question.is_answered %}
-			<form id="answer" method="POST" style="display: none;">
+			<form id="answer" method="POST"{% if not is_postback %} style="display: none;"{% endif %}>
 		   		<p>{{ answerForm.non_field_errors }}</p>
 				<p>{{ answerForm.text.errors }}</p>
 				<p>{{ answerForm.text.label_tag }}<br>

@@ -186,6 +186,7 @@ def question(request, question_id):
 	return render_to_response('question.html', {
 		'answers': answers,
 		'answerForm': answerForm,
+		'is_postback': (request.method == 'POST'),
 		'is_q': is_q,
 		'question': question,
 	}, context_instance = RequestContext(request))
