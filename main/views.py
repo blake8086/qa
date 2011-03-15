@@ -86,6 +86,7 @@ def ask(request):
 				path = '/',
 			)
 			url = connection.make_url(
+				cobrandingUrl = AMAZON_COBRAND,
 				returnURL = 'http://' + SITE_DOMAIN + '/thanks/' + str(q.id),
 				paymentReason = 'Question on code4cheap',
 				pipelineName = 'SingleUse',

@@ -1,4 +1,5 @@
 ADMIN_MEDIA_PREFIX = '/media/'
+AMAZON_COBRAND = ''
 AMAZON_DOMAIN = 'fps.sandbox.amazonaws.com'
 AWS_KEY_ID = 'AKIAJJSGY3AIETRPFIZA'
 AWS_SECRET_KEY = ''
