@@ -50,8 +50,32 @@
    		{{ questionForm.non_field_errors }}
 		<div class="centered">
 			<div>{{ questionForm.text.errors }}</div>
-	        {{ questionForm.text.label_tag }}<br>
-			<br>
+			<p>{{ questionForm.text.label_tag }}</p>
+			<p id="formatLink" style="margin-left: 550px;">formatting help &#9662;</p>
+			<div id="formatGuide" class="askBlock" style="background-color: white; border: 4px solid #ddd; display: none; position: absolute;">
+				<table>
+					<tr><td>put returns between paragraphs</td></tr>
+					<tr><td>for linebreak add 2 spaces at end</td></tr>
+					<tr><td>_<i>italic</i>_ or **<b>bold</b>**</td></tr>
+					<tr><td>indent code by 4 spaces</td></tr>
+					<tr><td>backtick escapes `<code>like _so_</code>`</td></tr>
+					<tr><td>quote by placing &gt; at start of line</td></tr>
+					<tr><td>to make links:</td></tr>
+					<tr><td>&lt;http://foo.com&gt;</td></tr>
+					<tr><td>[foo](http://foo.com)</td></tr>
+					<tr><td>&lt;a href="http://foo.com"&gt;foo&lt;/a&gt;</td></tr>
+					<tr><td>basic HTML also allowed</td></tr>
+				</table>
+			</div>
+			<script>
+				$('p#formatLink').hover(function() {
+					$('div#formatGuide').css('top', ($('p#formatLink').position().top + 16) + 'px')
+					$('div#formatGuide').css('left', ($('#id_text').position().left + $('#id_text').width() - $('div#formatGuide').width()) + 'px')
+					$('div#formatGuide').show();
+				}, function() {
+					$('div#formatGuide').fadeOut('slow');
+				})
+			</script>
 	        {{ questionForm.text }}
 		</div>
 		<div class="centered">
