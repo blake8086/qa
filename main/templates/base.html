@@ -15,16 +15,64 @@
 			<td width="33.3%"></td>
 			<td align="center" width="33.3%"><a href="/" style="width: 500px;"><img src="{{ MEDIA_URL }}images/logo-120px-from-Inkscape.png"></a></td>
 			<td align="right" width="33.3%" valign="top">
+				<style>
+					div.auth {
+						-webkit-border-radius: 7px;
+						background-color: #3b5a8d;
+						color: #e2ecfd;
+						cursor: pointer;
+						padding: 0.5em 1em;
+						position: absolute;
+						right: 1em;
+						top: 1em;
+					}
+					div.auth a { color: #e2ecfd; }
+					div#username { cursor: pointer; }
+					div#username:hover {
+						background-color: #2b4a7d;
+						color: #fff;
+					}
+					div#signinMenu form p { text-align: left; }
+				</style>
 				{% if user.email %}
-					{{user.email}} | <a href="/logout">logout</a>
+					<div id="username" class="auth">
+						{{user.email}} &#9662;
+					</div>
+					<div id="usernameMenu" class="auth" style="display: none;">
+						<p>{{user.email}} &#9652;</p>
+						<br>
+						<p><a href="/profile">edit your profile</a></p>
+						<br>
+						<form action="/logout" method="get">
+							<input type="submit" value="sign out">
+						</form>
+					</div>
 				{% else %}
-					<form action="/login" method="POST">
-						{% csrf_token %}
-						<label for="email">email:</label> <input type="text" name="email"><br>
-						<label for="password">password:</label> <input type="password" name="password"><br>
-						<input type="submit" value="login">
-					</form>
+					<div id="signin" class="auth">
+						sign in &#9662;
+					</div>
+					<div id="signinMenu" class="auth" style="display: none;">
+						<p>sign in &#9652;</p>
+						<form action="/login" method="POST">
+							{% csrf_token %}
+							<p><label for="email">email:</label></p>
+							<p><input type="text" name="email"></p>
+							<br>
+							<p><label for="password">password:</label></p>
+							<p><input type="password" name="password"></p>
+							<br>
+							<input type="submit" value="login">
+						</form>
+					</div>
 				{% endif %}
+				<script>
+					$('div#username, div#usernameMenu').click(function() {
+						$('div#username, div#usernameMenu').toggle();
+					})
+					$('div#signin, div#signinMenu').click(function() {
+						$('div#signin, div#signinMenu').toggle();
+					})
+				</script>
 			</td>
 			</tr></table>
 		</div>
