@@ -102,12 +102,22 @@
 				<p>{{ question.user.email }}</p>
 				<p>{{ question.created|timesince }} ago</p>
 			</div>
-			<div class="body shadowBox">
-				{{question.text|markdown}}
-				{% if is_q %}
-					<p><a href="/question/{{question.id}}/edit">edit your question</a></p>
-				{% endif %}
-			</div>
+			{% if edit %}
+				<div style="text-align: right;">
+					<form method="POST">
+						{% csrf_token %}
+						<textarea name="text">{{question.text}}</textarea>
+						<p><input type="submit" value="Save my changes"></p>
+					</form>
+				</div>
+			{% else %}
+				<div class="body shadowBox">
+					{{question.text|markdown}}
+					{% if is_q %}
+						<p><a href="/question/{{question.id}}/edit">edit your question</a></p>
+					{% endif %}
+				</div>
+			{% endif %}
 			<div style="clear: both;"></div>
 		</div>
 		{% if not is_q and not question.is_answered and not is_postback %}

@@ -1,8 +1,4 @@
-body {
-	background-color: #f1f0ec;
-	font-family: Trebuchet, sans-serif;
-	line-height: 1.25em;
-}
+/* styles for components in base.html */
 div#header {
 	background-color: #4970af;
 	height: 120px;

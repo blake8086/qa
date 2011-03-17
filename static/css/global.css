@@ -1,0 +1,18 @@
+/* styles that are global across c4c */
+body {
+	background-color: #f1f0ec;
+	font-family: Trebuchet, sans-serif;
+	line-height: 1.25em;
+}
+textarea {
+	-webkit-border-radius: 7px;
+	-moz-box-shadow: 0 0 5px #888;
+	-webkit-box-shadow: 0 0 5px #888;
+	box-shadow: 0 0 5px #888;
+	background-color: #fff;
+	border: 1px solid #ccc;
+	font-family: 'Consolas', 'Monaco', 'Lucida Console', 'Courier New', monospace;
+	height: 20em;
+	padding: 1em;
+	width: 700px;
+}

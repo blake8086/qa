@@ -205,8 +205,10 @@ def questionEdit(request, question_id):
 		return HttpResponseRedirect('/question/' + str(question.id))
 	else:
 		answers = Answer.objects.filter(question = question)
-		return render_to_response('questionEdit.html', {
+		return render_to_response('question.html', {
 			'answers': answers,
+			'edit': True,
+			'is_q': is_q,
 			'question': question,
 		}, context_instance = RequestContext(request))
 
