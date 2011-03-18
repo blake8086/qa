@@ -123,6 +123,7 @@ def logoutView(request):
 
 @csrf_protect
 def question(request, question_id):
+	showForm = (request.method == 'POST')
 	user = request.user
 	answerForm = AnswerForm(user, initial = {'newUser': 'True'})
 	question = Question.objects.get(pk = question_id)
@@ -178,6 +179,7 @@ def question(request, question_id):
 					text = answerForm.cleaned_data['text'],
 					user = user,
 				)
+				showForm = False
 				messages.success(request, message)
 				#clear answer form
 				answerForm = AnswerForm(user, initial = {'newUser': 'True'})
@@ -187,7 +189,7 @@ def question(request, question_id):
 	return render_to_response('question.html', {
 		'answers': answers,
 		'answerForm': answerForm,
-		'is_postback': (request.method == 'POST'),
+		'showForm': showForm,
 		'is_q': is_q,
 		'question': question,
 	}, context_instance = RequestContext(request))
