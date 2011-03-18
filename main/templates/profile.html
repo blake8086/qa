@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}profile - code4cheap{% endblock %}
+{% block content %}
+	<p>{{ user.username }}'s profile</p>
+	<p>questions asked: {{ questionCount }}</p>
+	<p>questions answered: {{ answerCount }}</p>
+	<p>dollars earned:</p>
+	<p>[ ] Disable all emails</p>
+	<p>[x] Send me emails when my question is answered</p>
+	<p>[x] Send me emails when my answer is picked</p>
+	<p>Display my name as:</p>
+	<p>() my email address</p>
+	<p>() other: [__________]</p>
+	<p>(no special characters)</p>
+	<p>Amazon account</p>
+	<p>Save changes</p>
+{% endblock %}

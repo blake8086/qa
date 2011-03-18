@@ -121,6 +121,16 @@ def logoutView(request):
 	logout(request)
 	return HttpResponseRedirect('/')
 
+def profile(request):
+	user = request.user
+	answerCount = Answer.objects.filter(user = user).count()
+	questionCount = Question.objects.filter(user = user).count()
+	return render_to_response('profile.html', {
+		'answerCount': answerCount,
+		'questionCount': questionCount,
+		'user': user,
+	}, context_instance = RequestContext(request))
+
 @csrf_protect
 def question(request, question_id):
 	showForm = (request.method == 'POST')
