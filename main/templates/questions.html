@@ -22,11 +22,15 @@
 			line-height: 125%;
 		}
 	</style>
+	<script>
+		$('table.questionBox').live('click', function() {
+			document.location = '/question/' + $(this).attr('id');
+		})
+	</script>
 	<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/questions.css" />
 	<a href="/ask" class="ask"></a>
 	{% for question in questions %}
-	<a href="/question/{{ question.id }}">
-		<table class="questionBox">
+		<table class="questionBox" id="{{ question.id }}">
 			<tr>
 				<td class="bounty">
 					<span class="currencySymbol">$</span><span class="c1">{{ question.price }}</span>
@@ -43,6 +47,5 @@
 				</td>
 			</tr>
 		</table>
-	</a>
 	{% endfor %}
 {% endblock %}
