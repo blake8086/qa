@@ -77,4 +77,4 @@ class UserProfile(models.Model):
 	enablePickedNotifications = models.BooleanField(default = True)
 	emailAlias = models.BooleanField(default = True)
 	modified = models.DateTimeField(auto_now = True)
-	user = models.ForeignKey(User)
+	user = models.ForeignKey(User, unique = True)

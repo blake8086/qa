@@ -99,7 +99,7 @@
 			<div class="info">
 				<p><span class="bounty"><span class="currencySymbol">$</span>{{question.price}}</span></p>
 				{% if question.is_answered %}<p>&#x2713;</p>{% endif %}
-				<p>{{ question.user.email }}</p>
+				<p>{{ question.user.username }}</p>
 				<p>{{ question.created|timesince }} ago</p>
 			</div>
 			{% if edit %}
@@ -181,7 +181,7 @@
 							<input type="submit" value="Mark this answer as correct"><br>
 						</form>
 					{% endif %}
-					{% if answer.is_winner %}&#x2713; {% endif %}{{answer.user.email}}:<br>
+					{% if answer.is_winner %}&#x2713; {% endif %}{{answer.user.username}}:<br>
 					{{answer.text|markdown}}<br>
 					{% if answer.user == user %}
 						{% if not answer.published %}

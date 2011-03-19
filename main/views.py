@@ -123,9 +123,41 @@ def logoutView(request):
 
 def profile(request):
 	user = request.user
-	profileForm = ProfileForm()
 	if not user.is_authenticated():
 		return HttpResponseRedirect('/')
+
+	profile = user.get_profile()
+	#if they posted the form
+	if request.method == 'POST':
+		profileForm = ProfileForm(request.POST)
+		if profileForm.is_valid():
+			cleanData = profileForm.cleaned_data
+			
+			profile.enableEmails = cleanData['enableEmails']
+			if cleanData['enableEmails']:
+				profile.enableAnswerNotifications = cleanData['enableAnswerNotifications']
+				profile.enablePickedNotifications = cleanData['enablePickedNotifications']
+			else:
+				profile.enableAnswerNotifications = False
+				profile.enablePickedNotifications = False				
+			profile.emailAlias = cleanData['emailAlias']
+			if cleanData['emailAlias'] == 'False':
+				user.username = cleanData['username']
+				user.save()
+			else:
+				user.username = user.email
+				user.save()
+			profile.save()
+			messages.success(request, 'Settings saved')
+	else:
+		profileForm = ProfileForm(initial = {
+			'enableEmails': profile.enableEmails,
+			'enableAnswerNotifications': profile.enableAnswerNotifications,
+			'enablePickedNotifications': profile.enablePickedNotifications,
+			'emailAlias': profile.emailAlias,
+			'username': user.username,
+		})
+	
 	answerCount = Answer.objects.filter(user = user).count()
 	questionCount = Question.objects.filter(user = user).count()
 	return render_to_response('profile.html', {
