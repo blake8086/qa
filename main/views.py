@@ -399,9 +399,9 @@ class QuestionForm(LoginForm):
 	)))
 
 class ProfileForm(forms.Form):
-	enableEmails = forms.BooleanField(label = 'Allow code4cheap to send me emails')
-	enableAnswerNotifications = forms.BooleanField(label = 'Send me emails when my question is answered')
-	enablePickedNotifications = forms.BooleanField(label = 'Send me emails when my answer is picked')
+	enableEmails = forms.BooleanField(label = 'Allow code4cheap to send me emails', required = False)
+	enableAnswerNotifications = forms.BooleanField(label = 'Send me emails when my question is answered', required = False)
+	enablePickedNotifications = forms.BooleanField(label = 'Send me emails when my answer is picked', required = False)
 	
 	emailAlias = forms.ChoiceField(
 		choices = (

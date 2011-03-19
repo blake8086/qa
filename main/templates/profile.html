@@ -48,5 +48,16 @@
 			{% csrf_token %}
 			<p><input type="submit" value="Save changes"></p>
 		</form>
+		<script>
+			$('input#id_enableEmails').change(function() {
+				if (!$('input#id_enableEmails').attr('checked')) {
+					$('input#id_enableAnswerNotifications').attr('checked', '').attr('disabled', 'disabled');
+					$('input#id_enablePickedNotifications').attr('checked', '').attr('disabled', 'disabled');
+				} else {
+					$('input#id_enableAnswerNotifications').attr('disabled', '');
+					$('input#id_enablePickedNotifications').attr('disabled', '');
+				}
+			})
+		</script>
 	</div>
 {% endblock %}
