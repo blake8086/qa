@@ -10,7 +10,7 @@ from django.shortcuts import render_to_response
 from django.template import Context, RequestContext
 from django.template.loader import get_template
 from django.views.decorators.csrf import csrf_protect
-from qa.main.models import Answer, Question
+from qa.main.models import Answer, Question, UserProfile
 from qa.main.models import LogCallerToken, LogPaymentResponse, LogPipelineResponse, LogRecipientToken
 from settings import *
 from urllib import urlencode
@@ -332,6 +332,8 @@ def createUserFromEmail(email, request):
 	user = User.objects.create_user(username, email, password)
 	user.is_active = False
 	user.save()
+	profile = UserProfile.objects.create(user = user)
+	profile.save()
 	user = authenticate(username = username, password = password)
 	login(request, user)
 	return (user, password)
