@@ -69,3 +69,12 @@ class Question(models.Model):
 		else:
 			check = '_'
 		return u'%d %s $%d.00 %s' % (self.id, check, self.price, self.text[:100])
+
+class UserProfile(models.Model):
+	created = models.DateTimeField(auto_now_add = True)
+	enableEmails = models.BooleanField(default = True)
+	enableAnswerNotifications = models.BooleanField(default = True)
+	enablePickedNotifications = models.BooleanField(default = True)
+	emailAlias = models.BooleanField(default = True)
+	modified = models.DateTimeField(auto_now = True)
+	user = models.ForeignKey(User)

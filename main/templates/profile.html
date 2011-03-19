@@ -1,17 +1,51 @@
 {% extends "base.html" %}
 {% block title %}profile - code4cheap{% endblock %}
 {% block content %}
-	<p>{{ user.username }}'s profile</p>
-	<p>questions asked: {{ questionCount }}</p>
-	<p>questions answered: {{ answerCount }}</p>
-	<p>dollars earned:</p>
-	<p>[ ] Disable all emails</p>
-	<p>[x] Send me emails when my question is answered</p>
-	<p>[x] Send me emails when my answer is picked</p>
-	<p>Display my name as:</p>
-	<p>() my email address</p>
-	<p>() other: [__________]</p>
-	<p>(no special characters)</p>
-	<p>Amazon account</p>
-	<p>Save changes</p>
+	<style>
+		div#content { margin: 1em; }
+		h1 { font-size: 123.1%; }
+		div.callout {
+			background-color: white;
+			float: left;
+			font-size: 197%;
+			font-weight: bold;
+			line-height: 2.0;
+			margin: 1em;
+			padding: 1em;
+		}
+		span.number { color: orange; }
+		form p, form li { font-size: 123.1%; margin: 0.5em 0; }
+	</style>
+	<div id="content">
+		<h1>{{ user.username }}'s profile</h1>
+		<div class="callout">
+			<p>questions asked: <span class="number">{{ questionCount }}</span></p>
+			<p>questions answered: <span class="number">{{ answerCount }}</span></p>
+			<p>dollars earned: <span class="number">0</span></p>
+		</div>
+		<div style="clear: both;"></div>
+		<form method="post">
+			<p>{{ profileForm.non_field_errors }}</p>
+
+			<p>{{ profileForm.enableEmails.errors }}</p>
+			<p>{{ profileForm.enableEmails }} {{ profileForm.enableEmails.label_tag }}</p>
+
+			<p>{{ profileForm.enableAnswerNotifications.errors }}</p>
+			<p>&nbsp;&nbsp;&nbsp;&nbsp;{{ profileForm.enableAnswerNotifications }} {{ profileForm.enableAnswerNotifications.label_tag }}</p>
+
+			<p>{{ profileForm.enablePickedNotifications.errors }}</p>
+			<p>&nbsp;&nbsp;&nbsp;&nbsp;{{ profileForm.enablePickedNotifications }} {{ profileForm.enablePickedNotifications.label_tag }}</p>
+
+			<br>
+
+			<p>{{ profileForm.emailAlias.errors }}</p>
+			<p>{{ profileForm.username.errors }}</p>
+			<p>{{ profileForm.emailAlias.label_tag }}</p>
+			<p>{{ profileForm.emailAlias }} {{ profileForm.username }}</p>
+
+			<br>
+			{% csrf_token %}
+			<p><input type="submit" value="Save changes"></p>
+		</form>
+	</div>
 {% endblock %}

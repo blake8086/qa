@@ -123,10 +123,14 @@ def logoutView(request):
 
 def profile(request):
 	user = request.user
+	profileForm = ProfileForm()
+	if not user.is_authenticated():
+		return HttpResponseRedirect('/')
 	answerCount = Answer.objects.filter(user = user).count()
 	questionCount = Question.objects.filter(user = user).count()
 	return render_to_response('profile.html', {
 		'answerCount': answerCount,
+		'profileForm': profileForm,
 		'questionCount': questionCount,
 		'user': user,
 	}, context_instance = RequestContext(request))
@@ -361,3 +365,18 @@ class QuestionForm(LoginForm):
 		('10', '$10.00'), ('15', '$15.00'), ('20', '$20.00'), ('25', '$25.00'),
 		('30', '$30.00'), ('40', '$40.00'), ('50', '$50.00'), ('100', '$100.00'),
 	)))
+
+class ProfileForm(forms.Form):
+	enableEmails = forms.BooleanField(label = 'Allow code4cheap to send me emails')
+	enableAnswerNotifications = forms.BooleanField(label = 'Send me emails when my question is answered')
+	enablePickedNotifications = forms.BooleanField(label = 'Send me emails when my answer is picked')
+	
+	emailAlias = forms.ChoiceField(
+		choices = (
+			('True', 'email'),
+			('False', 'username'),
+		),
+		label = 'Display my name as:',
+		widget = forms.RadioSelect,
+	)
+	username = forms.CharField(label = 'Other', help_text = 'letters and numbers only')

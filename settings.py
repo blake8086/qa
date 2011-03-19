@@ -1,3 +1,4 @@
+AUTH_PROFILE_MODULE = 'main.UserProfile'
 TIME_ZONE = 'America/Los_Angeles'
 LANGUAGE_CODE = 'en-us'
 SITE_ID = 1
