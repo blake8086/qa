@@ -327,6 +327,8 @@ def tos(request):
 
 ###############################################################################
 def createUserFromEmail(email, request):
+	if User.objects.filter(email = email).count() > 0:
+		raise Exception('Email is already in use (%s)' % email)
 	username = email
 	password = User.objects.make_random_password(8)
 	user = User.objects.create_user(username, email, password)
