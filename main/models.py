@@ -78,3 +78,6 @@ class UserProfile(models.Model):
 	emailAlias = models.BooleanField(default = True)
 	modified = models.DateTimeField(auto_now = True)
 	user = models.ForeignKey(User, unique = True)
+
+	def __unicode__(self):
+		return '%s\'s profile' % self.user.__unicode__()
