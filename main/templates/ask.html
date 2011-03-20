@@ -12,11 +12,6 @@
 			margin: 12px auto;
 			padding: 1em;
 		}
-		div.doubleColumn {
-			margin: 0 auto;
-			width: 960px;
-		}
-		div.doubleColumn div { float: left; }
 		div.centered {
 			margin: 12px auto;
 			text-align: center;
@@ -34,87 +29,63 @@
 		}
 		button[type=submit]:hover { opacity: 0.9; }
 	</style>
-	<form method="post">
-   		{{ questionForm.non_field_errors }}
-		<div class="centered">
-			<div>{{ questionForm.text.errors }}</div>
-			<p>{{ questionForm.text.label_tag }}</p>
-			<p id="formatLink" style="margin-left: 550px;">formatting help &#9662;</p>
-			<div id="formatGuide" class="askBlock" style="background-color: white; border: 4px solid #ddd; display: none; position: absolute; text-align: left;">
-				<b>Text</b>
-				<p>_<i>italic</i>_</p>
-				<p>**<b>bold</b>**</p>
-				<p>quote by placing &gt; at start of line</p>
-				<p>backtick escapes `<code>like _so_</code>`</p>
-				<br>
-				<b>Spacing</b>
-				<p>Indent code with four spaces</p>
-				<p>Put returns between paragraphs</p>
-				<p>For linebreak add two spaces at the end</p>
-				<br>
-				<b>Links</b>
-				<p>&lt;http://foo.com&gt;</p>
-				<p>[foo](http://foo.com)</p>
-				<p>&lt;a href="http://foo.com"&gt;foo&lt;/a&gt;</p>
+	<div style="margin: 0 auto; width: 700px;">
+		<form method="post">
+	   		{{ questionForm.non_field_errors }}
+			<div class="centered">
+				<div>{{ questionForm.text.errors }}</div>
+				<p>{{ questionForm.text.label_tag }}</p>
+				{% include 'formatHelp.html' %}
+		        {{ questionForm.text }}
 			</div>
-			<script>
-				$('p#formatLink').hover(function() {
-					$('div#formatGuide').css('top', ($('p#formatLink').position().top + 16) + 'px')
-					$('div#formatGuide').css('left', ($('#id_text').position().left + $('#id_text').width() - $('div#formatGuide').width()) + 'px')
-					$('div#formatGuide').show();
-				}, function() {
-					$('div#formatGuide').fadeOut('slow');
-				})
-			</script>
-	        {{ questionForm.text }}
-		</div>
-		<div class="centered">
-	        {{ questionForm.bounty.errors }}
-	        {{ questionForm.bounty.label_tag }}
-	        {{ questionForm.bounty }}
-		</div>
-		{% if questionForm.newUser %}
-			<div class="askBlock login" style="margin: 12px auto; width: 400px;">
-				<div style="text-align: center;">
-			        {{ questionForm.newUser.errors }}
-					{{ questionForm.newUser.label_tag }}
-					<br>
-			        {{ questionForm.newUser }}
+			<div class="centered">
+		        {{ questionForm.bounty.errors }}
+		        {{ questionForm.bounty.label_tag }}
+		        {{ questionForm.bounty }}
+			</div>
+			{% if questionForm.newUser %}
+				<div class="askBlock login" style="margin: 12px auto; width: 400px;">
+					<div style="text-align: center;">
+				        {{ questionForm.newUser.errors }}
+						{{ questionForm.newUser.label_tag }}
+						<br>
+				        {{ questionForm.newUser }}
+					</div>
+					<table style="margin: 0 auto;">
+						<tr><td colspan="2">
+						        {{ questionForm.email.errors }}
+						</td></tr>
+						<tr>
+							<td style="text-align: right;">{{ questionForm.email.label_tag }}</td>
+							<td>{{ questionForm.email }}</td>
+						</tr>
+						<tr><td colspan="2">
+						        <span class="email2">{{ questionForm.email2.errors }}</span>
+						        <span class="password">{{ questionForm.password.errors }}</span>
+						</td></tr>
+						<tr>
+							<td style="text-align: right;">
+								<span class="email2">{{ questionForm.email2.label_tag }}</span>
+						        <span class="password">{{ questionForm.password.label_tag }}</span>
+							</td>
+							<td>
+						        <span class="email2">{{ questionForm.email2 }}</span>
+						        <span class="password">{{ questionForm.password }}</span>
+							</td>
+						</tr>
+					</table>
 				</div>
-				<table style="margin: 0 auto;">
-					<tr><td colspan="2">
-					        {{ questionForm.email.errors }}
-					</td></tr>
-					<tr>
-						<td style="text-align: right;">{{ questionForm.email.label_tag }}</td>
-						<td>{{ questionForm.email }}</td>
-					</tr>
-					<tr><td colspan="2">
-					        <span class="email2">{{ questionForm.email2.errors }}</span>
-					        <span class="password">{{ questionForm.password.errors }}</span>
-					</td></tr>
-					<tr>
-						<td style="text-align: right;">
-							<span class="email2">{{ questionForm.email2.label_tag }}</span>
-					        <span class="password">{{ questionForm.password.label_tag }}</span>
-						</td>
-						<td>
-					        <span class="email2">{{ questionForm.email2 }}</span>
-					        <span class="password">{{ questionForm.password }}</span>
-						</td>
-					</tr>
-				</table>
+			{% endif %}
+			<div class="centered">
+				By clicking on the button below you are agreeing to code4cheap's <a href="/tos">terms of service</a>.<br>
+				{% csrf_token %}
+				<br>
+				<button type="submit" alt="Checkout with Amazon">
+					<img src="{{ MEDIA_URL }}images/amazonPayNow.gif">
+				</button>
 			</div>
-		{% endif %}
-		<div class="centered">
-			By clicking on the button below you are agreeing to code4cheap's <a href="/tos">terms of service</a>.<br>
-			{% csrf_token %}
-			<br>
-			<button type="submit" alt="Checkout with Amazon">
-				<img src="{{ MEDIA_URL }}images/amazonPayNow.gif">
-			</button>
-		</div>
-	</form>
+		</form>
+	</div>
 	<script>
 		function showHide() {
 			if ($('input[name=newUser]').attr('checked')) {

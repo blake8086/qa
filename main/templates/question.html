@@ -138,7 +138,8 @@
 				<p>{{ answerForm.text.errors }}</p>
 				<p>{{ answerForm.text.label_tag }}<br>
 					
-				{{ answerForm.text }}</p>
+				{% include 'formatHelp.html' %}
+				<p>{{ answerForm.text }}</p>
 
 				<p>{{ answerForm.email.errors }}</p>
 				<p>{{ answerForm.email.label_tag }} {{ answerForm.email }}</p>

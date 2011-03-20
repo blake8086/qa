@@ -1,0 +1,28 @@
+<style>div#formatGuide p { margin: 0; }</style>
+<p style="text-align: right;"><span id="formatCue">formatting help &#9662;</span></p>
+<div id="formatGuide" class="shadowBox" style="background-color: white; border: 4px solid #ddd; display: none; position: absolute; text-align: left;">
+	<b>Text</b>
+	<p>_<i>italic</i>_</p>
+	<p>**<b>bold</b>**</p>
+	<p>quote by placing &gt; at start of line</p>
+	<p>backtick escapes `<code>like _so_</code>`</p>
+	<br>
+	<b>Spacing</b>
+	<p>Indent code with four spaces</p>
+	<p>Put returns between paragraphs</p>
+	<p>For linebreak add two spaces at the end</p>
+	<br>
+	<b>Links</b>
+	<p>&lt;http://foo.com&gt;</p>
+	<p>[foo](http://foo.com)</p>
+	<p>&lt;a href="http://foo.com"&gt;foo&lt;/a&gt;</p>
+</div>
+<script>
+	$('span#formatCue').hover(function() {
+		$('div#formatGuide').css('top', ($('span#formatCue').position().top + 16) + 'px')
+		$('div#formatGuide').css('left', ($('span#formatCue').position().left + $('span#formatCue').width() - $('div#formatGuide').width()) + 'px')
+		$('div#formatGuide').show();
+	}, function() {
+		$('div#formatGuide').hide();
+	})
+</script>
