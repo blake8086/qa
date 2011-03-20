@@ -2,20 +2,104 @@
 {% load markup %}
 {% block title %}QA: {{question.text|truncatewords:5}}{% endblock %}
 {% block content %}
-<br>
-{% if question.is_answered %}&#x2713; {% endif %}${{question.price}}<br>
-<br>
-{{question.user.email}}:<br>
-<br>
-{{question.text|markdown}}<br>
-<br>
-Edit your answer:
-<hr>
-{% if answer.is_winner %}&#x2713; {% endif %}{{answer.user.email}}:<br>
-<form method="POST">
-	{% csrf_token %}
-	<textarea name="text" rows="20" cols="80">{{answer.text}}</textarea><br>
-	<input type="submit" value="Save my changes">
-</form>
-<hr>
+	<style>
+		div.column {
+			font-size: 108%;
+			line-height: 1.25em;
+			margin: 0px auto;
+			width: 900px;
+		}
+		div.shadowBox, #id_text {
+			-webkit-border-radius: 7px;
+			-moz-box-shadow: 0 0 5px #888;
+			-webkit-box-shadow: 0 0 5px #888;
+			box-shadow: 0 0 5px #888;
+			background-color: #f8f8f8;
+			border: 1px solid #ccc;
+			padding: 10px;
+		}
+		div.question {
+			margin: 30px auto;
+		}
+		div.question div.info {
+			float: left;
+			width: 150px;
+		}
+		div.question span.bounty {
+			color: #f79939;
+			font-family: Tahoma;
+			font-size: 524%;
+			line-height: 1em;
+		}
+		div.question span.bounty span.currencySymbol {
+			font-family: "Tahoma";
+			font-size: 50%;
+			vertical-align: text-top;
+		}
+		div.question div.body {
+			float: right;
+			width: 700px;
+		}
+		div.question pre, div.answer pre {
+			background-color: #ddd;
+			margin: 1em 0;
+			overflow: auto;
+			padding: 1em;
+		}
+		div.question pre { width: 670px;}
+		div.answer pre { width: 850px;}
+		div.question code, div.answer code {
+			font-family: 'Consolas', 'Monaco', 'Lucida Console', 'Courier New', monospace;
+			line-height: 1.25em;
+		}
+		div#answererTeaser {
+			color: #525252;
+			font-size: 197%;
+			line-height: 1em;
+			margin: 0 auto;
+			text-align: center;
+		}
+		div.answer {
+			margin: 30px auto;
+		}
+		div.answer div.body {
+			font-size: 123.1%;
+			padding: 12px;
+		}
+		div.answer div.notes {
+			color: gray;
+			font-size: 93%;
+		}
+		textarea[name=text] {
+			margin: 10px 0px;
+			width: 900px;
+		}
+		ul.errorlist {
+			background-color: #dfd;
+			color: #040;
+		}
+		form#answer p {
+			margin: 1em 0;
+		}
+	</style>
+	<div class="column">
+		<div class="question">
+			<div class="info">
+				<p><span class="bounty"><span class="currencySymbol">$</span>{{question.price}}</span></p>
+				<p>{{ question.user.username }}</p>
+				<p>{{ question.created|timesince }} ago</p>
+			</div>
+			<div class="body shadowBox">
+				{{question.text|markdown}}
+			</div>
+			<div style="clear: both;"></div>
+		</div>
+		<div class="answer">
+			{% if answer.is_winner %}&#x2713; {% endif %}{{answer.user.email}}:<br>
+			<form method="POST">
+				{% csrf_token %}
+				<textarea name="text" rows="20" cols="80">{{answer.text}}</textarea><br>
+				<input type="submit" value="Save my changes">
+			</form>
+		</div>
 {% endblock %}
