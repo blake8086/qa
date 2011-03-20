@@ -413,4 +413,12 @@ class ProfileForm(forms.Form):
 		label = 'Display my name as:',
 		widget = forms.RadioSelect,
 	)
-	username = forms.CharField(label = 'Other', help_text = 'letters and numbers only')
+	username = forms.CharField(required = False)
+	def clean_username(self):
+		username = self.cleaned_data.get('username')
+		if self.cleaned_data.get('emailAlias') == 'False':
+			if username == '':
+				raise forms.ValidationError('Username cannot be blank.')
+			if User.objects.filter(username = username):
+				raise forms.ValidationError('This username is already taken.')
+		return username

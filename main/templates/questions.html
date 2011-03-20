@@ -40,7 +40,7 @@
 						{{ question.text|markdown }}
 					</div>
 					<div class="notes">
-						by {{ question.user.email }} &nbsp;
+						by {{ question.user.username }} &nbsp;
 						{{ question.answer__count }} answer{{ question.answer__count|pluralize }} &nbsp;
 						asked {{ question.created|timesince }} ago
 					</div>
