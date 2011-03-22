@@ -72,6 +72,23 @@
 		div.answer {
 			margin: 30px auto;
 		}
+		div.answer div.username {
+			color: gray;
+			float: left;
+			font-size: 197%;
+			line-height: 1.25em;
+		}
+		button.winner {
+			background-color: transparent;
+			background-image: url({{ MEDIA_URL }}images/winningButton.png);
+			border: 0 solid transparent;
+			cursor: pointer;
+			height: 80px;
+			width: 339px;
+		}
+		button.winner:hover {
+			background-position: center bottom;
+		}
 		div.answer div.body {
 			font-size: 123.1%;
 			padding: 12px;
@@ -173,14 +190,20 @@
 		{% for answer in answers %}
 			{% if answer.published or answer.user == user %}
 				<div class="answer shadowBox">
+					<div class="username">
+						<p>{{answer.user.username}} answered:</p>
+						<p>{{answer.created|timesince}} ago</p>
+					</div>
 					{% if is_q and not answer.is_winner and not question.is_answered %}
-						<form method="POST">
-							{% csrf_token %}
-							<input type="hidden" name="answer" value="{{answer.id}}">
-							<input type="submit" value="Mark this answer as correct"><br>
-						</form>
+						<div style="float: right;">
+							<form method="POST">
+								{% csrf_token %}
+								<input type="hidden" name="answer" value="{{answer.id}}">
+								<button class="winner"></button>
+							</form>
+						</div>
 					{% endif %}
-					{% if answer.is_winner %}&#x2713; {% endif %}{{answer.user.username}}:<br>
+					<div style="clear: both;"></div>
 					{{answer.text|markdown}}<br>
 					{% if answer.user == user %}
 						{% if not answer.published %}
