@@ -17,6 +17,17 @@
 			height: 6.75em;
 			overflow: hidden;
 		}
+		table.questionBox:hover div.questionFade {
+			background-position: bottom center;
+		}
+		div.questionFade {
+			background-image: url({{ MEDIA_URL }}images/fade32px.png);
+			height: 32px;
+			margin: -32px 0 0 0;
+			position: relative;
+			width: 100%;
+			z-index: 1;
+		}
 		td.body p:first-child:first-line {
 			font-size: 150%;
 			line-height: 125%;
@@ -39,6 +50,7 @@
 					<div class="questionText">
 						{{ question.text|markdown }}
 					</div>
+					<div class="questionFade"></div>
 					<div class="notes">
 						by {{ question.user.username }} &nbsp;
 						{{ question.answer__count }} answer{{ question.answer__count|pluralize }} &nbsp;
