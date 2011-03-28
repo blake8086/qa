@@ -90,7 +90,7 @@ def ask(request):
 				returnURL = 'http://' + SITE_DOMAIN + '/thanks/' + str(q.id),
 				paymentReason = 'Question on code4cheap',
 				pipelineName = 'SingleUse',
-				transactionAmount = str(q.price) + '.00',
+				transactionAmount = str(q.price),
 			)
 			return HttpResponseRedirect(url)
 	else:
