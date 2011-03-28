@@ -312,7 +312,7 @@ def thanks(request, question_id):
 		LogPaymentResponse.objects.create(question = question, response = str(payResponse))
 	
 		#check for errors
-		if 'status' in payResponse and (payResponse['status'] == 'SA' or payResponse['status'] == 'SB' or payResponse['status'] == 'SC'):
+		if 'Status' in payResponse and payResponse['Status']:
 			question.published = True
 			question.save()
 			messages.success(request, 'Your question has been published!')
