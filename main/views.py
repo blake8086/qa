@@ -305,7 +305,7 @@ def thanks(request, question_id):
 			callerTokenId = callerTokenId,
 			recipientTokenId = recipientTokenId,
 			senderTokenId = request.GET['tokenID'],
-			transactionAmount = str(question.price) + '.00',
+			transactionAmount = str(question.price),
 		)
 	
 		payResponse = result.__dict__
