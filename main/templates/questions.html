@@ -44,7 +44,7 @@
 		<table class="questionBox" id="{{ question.id }}">
 			<tr>
 				<td class="bounty">
-					<span class="currencySymbol">$</span><span class="c1">{{ question.price }}</span>
+					<span class="currencySymbol">$</span><span class="c1">{{ question.price|floatformat:"-2" }}</span>
 				</td>
 				<td class="body">
 					<div class="questionText">

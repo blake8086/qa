@@ -112,7 +112,7 @@
 	<div class="column">
 		<div class="question">
 			<div class="info">
-				<p><span class="bounty"><span class="currencySymbol">$</span>{{question.price}}</span></p>
+				<p><span class="bounty"><span class="currencySymbol">$</span>{{ question.price|floatformat:"-2" }}</span></p>
 				{% if question.is_answered %}<p>&#x2713;</p>{% endif %}
 				<p>{{ question.user.username }}</p>
 				<p>{{ question.created|timesince }} ago</p>

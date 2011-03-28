@@ -68,7 +68,7 @@ class Question(models.Model):
 			check = 'X'
 		else:
 			check = '_'
-		return u'%d %s $%d.00 %s' % (self.id, check, self.price, self.text[:100])
+		return u'%d %s $%6.2f %s' % (self.id, check, self.price, self.text[:100])
 
 class UserProfile(models.Model):
 	created = models.DateTimeField(auto_now_add = True)
