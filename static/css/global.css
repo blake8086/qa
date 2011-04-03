@@ -1,4 +1,6 @@
 /* styles that are global across c4c */
+a { color: #1f4db0; }
+a:visited { color: #74645b; }
 body {
 	background-color: #f1f0ec;
 	font-family: Trebuchet, sans-serif;
