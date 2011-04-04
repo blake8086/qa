@@ -350,7 +350,7 @@ def sendTemplateEmail(subject, toEmail, templateName, context):
 
 	text_content = plaintext.render(context)
 	html_content = htmly.render(context)
-	msg = EmailMultiAlternatives(subject, text_content, 'blake8086@gmail.com', [toEmail])
+	msg = EmailMultiAlternatives(subject, text_content, 'code4cheap@gmail.com', [toEmail])
 	msg.attach_alternative(html_content, "text/html")
 	msg.send()
 
