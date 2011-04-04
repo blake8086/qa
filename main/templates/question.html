@@ -153,9 +153,9 @@
 			<form id="answer" method="POST"{% if not showForm %} style="display: none;"{% endif %}>
 		   		<p>{{ answerForm.non_field_errors }}</p>
 				<p>{{ answerForm.text.errors }}</p>
-				<p>{{ answerForm.text.label_tag }}<br>
+				<p>{{ answerForm.text.label_tag }}
 					
-				{% include 'formatHelp.html' %}
+				{% include 'formatHelp.html' %}</p>
 				<p>{{ answerForm.text }}</p>
 
 				<p>{{ answerForm.email.errors }}</p>
