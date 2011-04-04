@@ -265,7 +265,7 @@ def questionEdit(request, question_id):
 		}, context_instance = RequestContext(request))
 
 def questions(request):
-	questions = Question.objects.filter(published = True).annotate(Count('answer'))
+	questions = Question.objects.filter(published = True).annotate(Count('answer')).order_by('created').reverse()
 	return render_to_response('questions.html', {
 		'questions': questions
 	}, context_instance = RequestContext(request))
