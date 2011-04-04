@@ -199,7 +199,7 @@ def question(request, question_id):
 		else:
 			answerForm = AnswerForm(user, request.POST)
 			if answerForm.is_valid():
-				message = 'Answer posted!'
+				message = 'Answer submitted!'
 				if not user.is_authenticated():
 					if answerForm.cleaned_data['newUser'] == u'True':
 						email = answerForm.cleaned_data['email']
