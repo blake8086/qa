@@ -63,7 +63,7 @@
 			background-image: url({{ MEDIA_URL }}images/answerButton.png);
 			display: block;
 			height: 80px;
-			margin: 12px auto;
+			margin: 12px auto 0 auto;
 			width: 316px;
 		}
 		a.ask:hover {
@@ -139,7 +139,7 @@
 			<div id="answererTeaser">
 				<p>Get <span style="color: #f79939; font-weight: bold;">${{ question.price }}</span> for posting the best answer!*</p>
 				<p><a href="#" class="ask"></a></p>
-				<p>*minus service fee</p>
+				<p style="font-size: 50%;">*minus <a href="/faq#fees">service fee</a></p>
 			</div>
 			<script>
 				$('div#answererTeaser a.ask').click(function(event) {
