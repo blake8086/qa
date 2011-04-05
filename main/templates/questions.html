@@ -50,7 +50,7 @@
 					<div class="questionFade"></div>
 					<div class="notes">
 						by {{ question.user.username }} &nbsp;
-						{{ question.answer__count }} answer{{ question.answer__count|pluralize }} &nbsp;
+						{{ question.public_answers|default_if_none:"0" }} answer{{ question.public_answers|default_if_none:0|pluralize }} &nbsp;
 						asked {{ question.created|timesince }} ago
 					</div>
 				</td>

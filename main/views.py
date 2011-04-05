@@ -6,7 +6,7 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.core.mail import EmailMultiAlternatives, send_mail
-from django.db.models import Count
+from django.db.models import Count, Sum
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponseForbidden
 from django.shortcuts import render_to_response
 from django.template import Context, RequestContext
@@ -156,11 +156,14 @@ def profile(request):
 			profile.save()
 			messages.success(request, 'Settings saved')
 	else:
+		emailAlias = False
+		if '@' in user.username:
+			emailAlias = True
 		profileForm = ProfileForm(initial = {
 			'enableEmails': profile.enableEmails,
 			'enableAnswerNotifications': profile.enableAnswerNotifications,
 			'enablePickedNotifications': profile.enablePickedNotifications,
-			'emailAlias': profile.emailAlias,
+			'emailAlias': emailAlias,
 			'username': user.username,
 		})
 	
@@ -201,7 +204,7 @@ def question(request, question_id):
 		else:
 			answerForm = AnswerForm(user, request.POST)
 			if answerForm.is_valid():
-				message = 'Answer posted!'
+				message = 'Answer submitted!'
 				if not user.is_authenticated():
 					if answerForm.cleaned_data['newUser'] == u'True':
 						email = answerForm.cleaned_data['email']
@@ -267,7 +270,7 @@ def questionEdit(request, question_id):
 		}, context_instance = RequestContext(request))
 
 def questions(request):
-	questions = Question.objects.filter(published = True).annotate(Count('answer'))
+	questions = Question.objects.filter(published = True).annotate(public_answers = Sum('answer__published')).order_by('created').reverse()
 	return render_to_response('questions.html', {
 		'questions': questions
 	}, context_instance = RequestContext(request))
@@ -352,7 +355,7 @@ def sendTemplateEmail(subject, toEmail, templateName, context):
 
 	text_content = plaintext.render(context)
 	html_content = htmly.render(context)
-	msg = EmailMultiAlternatives(subject, text_content, 'blake8086@gmail.com', [toEmail])
+	msg = EmailMultiAlternatives(subject, text_content, 'code4cheap@gmail.com', [toEmail])
 	msg.attach_alternative(html_content, "text/html")
 	msg.send()
 

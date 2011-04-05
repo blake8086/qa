@@ -63,7 +63,7 @@
 			background-image: url({{ MEDIA_URL }}images/answerButton.png);
 			display: block;
 			height: 80px;
-			margin: 12px auto;
+			margin: 12px auto 0 auto;
 			width: 316px;
 		}
 		a.ask:hover {
@@ -118,6 +118,7 @@
 				<p>{{ question.created|timesince }} ago</p>
 			</div>
 			{% if edit %}
+				{% include 'formatHelp.html' %}
 				<div style="text-align: right;">
 					<form method="POST">
 						{% csrf_token %}
@@ -139,7 +140,7 @@
 			<div id="answererTeaser">
 				<p>Get <span style="color: #f79939; font-weight: bold;">${{ question.price }}</span> for posting the best answer!*</p>
 				<p><a href="#" class="ask"></a></p>
-				<p>*minus service fee</p>
+				<p style="font-size: 50%;">*minus <a href="/faq#howMuchDoIGet">service fee</a></p>
 			</div>
 			<script>
 				$('div#answererTeaser a.ask').click(function(event) {
@@ -153,9 +154,9 @@
 			<form id="answer" method="POST"{% if not showForm %} style="display: none;"{% endif %}>
 		   		<p>{{ answerForm.non_field_errors }}</p>
 				<p>{{ answerForm.text.errors }}</p>
-				<p>{{ answerForm.text.label_tag }}<br>
+				<p>{{ answerForm.text.label_tag }}
 					
-				{% include 'formatHelp.html' %}
+				{% include 'formatHelp.html' %}</p>
 				<p>{{ answerForm.text }}</p>
 
 				<p>{{ answerForm.email.errors }}</p>
@@ -188,7 +189,7 @@
 			</script>
 		{% endif %}
 		{% for answer in answers %}
-			{% if answer.published or answer.user == user %}
+			{% if answer.published or answer.user == user or user.is_superuser %}
 				<div class="answer shadowBox">
 					<div class="username">
 						<p>{{answer.user.username}} answered:</p>
@@ -210,6 +211,9 @@
 							<i>This answer is not yet public, please activate your account to make it public.</i>
 						{% endif %}
 						<a href="/answer/{{answer.id}}/edit">edit your answer</a><br>
+					{% endif %}
+					{% if not answer.published and user.is_superuser %}
+						<i>This answer is unpublished</i>
 					{% endif %}
 				</div>
 			{% endif %}
