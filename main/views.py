@@ -1,5 +1,9 @@
 import sys
+<<<<<<< HEAD
 sys.path.append('/Library/Python/2.6/site-packages')
+=======
+sys.path.append('/home/blake8086/webapps/c4c_development/qa')
+>>>>>>> ae988370682908ed1e287d11f0dccac88c58dc9b
 from qa.boto.fps.connection import FPSConnection
 from django import forms
 from django.contrib import messages
