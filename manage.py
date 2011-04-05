@@ -2,8 +2,6 @@
 from django.core.management import execute_manager
 try:
 	#added because of stupidness or something
-	import sys
-	sys.path.append('/Library/Python/2.6/site-packages')
 	import settings # Assumed to be in the same directory.
 except ImportError:
 	import sys
