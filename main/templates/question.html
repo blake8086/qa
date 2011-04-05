@@ -188,7 +188,7 @@
 			</script>
 		{% endif %}
 		{% for answer in answers %}
-			{% if answer.published or answer.user == user %}
+			{% if answer.published or answer.user == user or user.is_superuser %}
 				<div class="answer shadowBox">
 					<div class="username">
 						<p>{{answer.user.username}} answered:</p>
@@ -210,6 +210,9 @@
 							<i>This answer is not yet public, please activate your account to make it public.</i>
 						{% endif %}
 						<a href="/answer/{{answer.id}}/edit">edit your answer</a><br>
+					{% endif %}
+					{% if not answer.published and user.is_superuser %}
+						<i>This answer is unpublished</i>
 					{% endif %}
 				</div>
 			{% endif %}
