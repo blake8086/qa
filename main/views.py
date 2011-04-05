@@ -154,11 +154,14 @@ def profile(request):
 			profile.save()
 			messages.success(request, 'Settings saved')
 	else:
+		emailAlias = False
+		if '@' in user.username:
+			emailAlias = True
 		profileForm = ProfileForm(initial = {
 			'enableEmails': profile.enableEmails,
 			'enableAnswerNotifications': profile.enableAnswerNotifications,
 			'enablePickedNotifications': profile.enablePickedNotifications,
-			'emailAlias': profile.emailAlias,
+			'emailAlias': emailAlias,
 			'username': user.username,
 		})
 	
