@@ -7,6 +7,7 @@ body {
 	font-family: Trebuchet, sans-serif;
 	line-height: 1.25em;
 }
+button, input[type=submit] { padding: 0em 1em; }
 em { font-style: italic; }
 strong { font-weight: bold; }
 textarea {
