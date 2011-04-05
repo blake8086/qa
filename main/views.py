@@ -4,7 +4,7 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.core.mail import EmailMultiAlternatives, send_mail
-from django.db.models import Count
+from django.db.models import Count, Sum
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponseForbidden
 from django.shortcuts import render_to_response
 from django.template import Context, RequestContext
@@ -268,7 +268,7 @@ def questionEdit(request, question_id):
 		}, context_instance = RequestContext(request))
 
 def questions(request):
-	questions = Question.objects.filter(published = True).annotate(Count('answer')).order_by('created').reverse()
+	questions = Question.objects.filter(published = True).annotate(public_answers = Sum('answer__published')).order_by('created').reverse()
 	return render_to_response('questions.html', {
 		'questions': questions
 	}, context_instance = RequestContext(request))
