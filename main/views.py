@@ -1,3 +1,5 @@
+import sys
+sys.path.append('/home/blake8086/webapps/c4c_development/qa')
 from qa.boto.fps.connection import FPSConnection
 from django import forms
 from django.contrib import messages
