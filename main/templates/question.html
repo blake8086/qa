@@ -118,6 +118,7 @@
 				<p>{{ question.created|timesince }} ago</p>
 			</div>
 			{% if edit %}
+				{% include 'formatHelp.html' %}
 				<div style="text-align: right;">
 					<form method="POST">
 						{% csrf_token %}
