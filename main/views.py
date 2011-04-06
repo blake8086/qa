@@ -108,6 +108,15 @@ def faq(request):
 	return render_to_response('faq.html', {
 	}, context_instance = RequestContext(request))
 
+def home(request):
+	if request.user.is_authenticated():
+		questions = Question.objects.filter(published = True).annotate(public_answers = Sum('answer__published')).order_by('created').reverse()
+		return render_to_response('questions.html', {
+			'questions': questions
+		}, context_instance = RequestContext(request))
+	else:
+		return render_to_response('splash.html', {}, context_instance = RequestContext(request))
+
 def loginView(request):
 	if request.method == 'POST':
 		user = User.objects.get(email = request.POST['email'])
@@ -271,12 +280,6 @@ def questionEdit(request, question_id):
 			'is_q': is_q,
 			'question': question,
 		}, context_instance = RequestContext(request))
-
-def questions(request):
-	questions = Question.objects.filter(published = True).annotate(public_answers = Sum('answer__published')).order_by('created').reverse()
-	return render_to_response('questions.html', {
-		'questions': questions
-	}, context_instance = RequestContext(request))
 
 def thanks(request, question_id):
 	question = Question.objects.get(pk = question_id)

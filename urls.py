@@ -16,5 +16,5 @@ urlpatterns = patterns('',
     (r'^question/(?P<question_id>\d+)/edit$', 'qa.main.views.questionEdit'),
     (r'^thanks/(?P<question_id>\d+)$', 'qa.main.views.thanks'),
     (r'^tos$', 'qa.main.views.tos'),
-    (r'^', 'qa.main.views.questions'),
+    (r'^', 'qa.main.views.home'),
 )
