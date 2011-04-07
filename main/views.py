@@ -127,7 +127,7 @@ def loginView(request):
 				Answer.objects.filter(user = user).update(published = True)
 				messages.success(request, 'Your account has been activated!')
 			login(request, user)
-			messages.success(request, 'Logged in as ' + user.email)
+			messages.success(request, 'Logged in as ' + user.username)
 			return HttpResponseRedirect('/')
 		else:
 			messages.error(request, 'Wrong email/password')
