@@ -81,7 +81,8 @@
 			<div style="clear: both;"></div>
 		</div>
 		<div class="answer">
-			{% if answer.is_winner %}&#x2713; {% endif %}{{answer.user.email}}:<br>
+			<p>{% include "formatHelp.html" %}</p>
+			{% if answer.is_winner %}&#x2713; {% endif %}{{answer.user.username}}:<br>
 			<form method="POST">
 				{% csrf_token %}
 				<textarea name="text" rows="20" cols="80">{{answer.text}}</textarea><br>
