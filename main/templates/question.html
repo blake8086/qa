@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% load markup %}
-{% block title %}{{question.text|truncatewords:5}} - code4cheap{% endblock %}
+{% block title %}{{question.text|markdown|removetags:"a blockquote br code em p strong"|truncatewords:5}} - code4cheap{% endblock %}
 {% block content %}
 	<style>
 		div.column {

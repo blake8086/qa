@@ -251,7 +251,7 @@ def question(request, question_id):
 				#clear answer form
 				answerForm = AnswerForm(user, initial = {'newUser': 'True'})
 					
-	answers = Answer.objects.filter(question = question)
+	answers = Answer.objects.filter(question = question).order_by('created').reverse()
 	
 	return render_to_response('question.html', {
 		'answers': answers,
