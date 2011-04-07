@@ -66,12 +66,13 @@
 					</div>
 				{% endif %}
 				<script>
-					$('div#username, div#usernameMenu').click(function() {
+					$('div#username, div#usernameMenu p:first').click(function() {
 						$('div#username, div#usernameMenu').toggle();
-					})
-					$('div#signin, div#signinMenu').click(function() {
+					});
+					$('div#signin, div#signinMenu p:first').click(function() {
 						$('div#signin, div#signinMenu').toggle();
-					})
+						$('input[name=email]').focus();
+					});
 				</script>
 			</td>
 			</tr></table>
