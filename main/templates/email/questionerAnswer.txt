@@ -1,0 +1,8 @@
+Good news, everyone! Somebody posted a new answer to your question. You can check it out here:
+
+{{ url }}
+
+If you're happy with this answer, don't forget to award your bounty on the question page (or wait a bit longer for some more answers to appear).
+
+Good luck!
+Blake Householder and the code4cheap.com team

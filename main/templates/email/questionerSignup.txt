@@ -1,3 +1,10 @@
-Thanks for signing up with code4cheap!
-Your password is {{ password }}
+Hi!
+
+You just signed up for code4cheap.com. Good job! Please follow this link to confirm that this is your e-mail address:
+
 {{ activateUrl }}
+
+Your password is: {{ password }}
+
+Thanks, 
+Blake Householder and the code4cheap.com team

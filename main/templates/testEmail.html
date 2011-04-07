@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %}Email Test - code4cheap{% endblock %}
+{% block content %}
+	<style>
+		#email th, #email td {
+			border: 1px solid black;
+			padding: 1em;
+		}
+		pre {
+			overflow: auto;
+			width: 400px;
+		}
+	</style>
+	<table id="email">
+		<th>Text</th>
+		<th>HTML</th>
+		<tr><td colspan="2">Answerer Accepted</td></tr>
+		<tr>
+			<td><pre>{% include "email/answererAccepted.txt" %}</pre></td>
+			<td>{% include "email/answererAccepted.html" %}</td>
+		</tr>
+
+		<tr><td colspan="2">Answerer Signup</td></tr>
+		<tr>
+			<td><pre>{% include "email/answererSignup.txt" %}</pre></td>
+			<td>{% include "email/answererSignup.html" %}</td>
+		</tr>
+
+		<tr><td colspan="2">Questioner Answer</td></tr>
+		<tr>
+			<td><pre>{% include "email/questionerAnswer.txt" %}</pre></td>
+			<td>{% include "email/questionerAnswer.html" %}</td>
+		</tr>
+
+		<tr><td colspan="2">Questioner Signup</td></tr>
+		<tr>
+			<td><pre>{% include "email/questionerSignup.txt" %}</pre></td>
+			<td>{% include "email/questionerSignup.html" %}</td>
+		</tr>
+
+		<tr><td colspan="2">Questioner Thanks</td></tr>
+		<tr>
+			<td><pre>{% include "email/questionerThanks.txt" %}</pre></td>
+			<td>{% include "email/questionerThanks.html" %}</td>
+		</tr>
+	</table>
+{% endblock %}

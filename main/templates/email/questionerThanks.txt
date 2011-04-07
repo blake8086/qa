@@ -1,1 +1,12 @@
-Thanks for ordering your question/sandwich from code4cheap.com!
+Hi!
+
+You posted a question at code4cheap.com. Thanks for your business!
+
+You can see your question here:
+
+{{ url }}
+
+We'll send you an email when someone posts an answer. 
+
+Thanks, 
+Blake Householder and the code4cheap.com team

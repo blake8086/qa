@@ -1,1 +1,11 @@
-Your answer was accepted. get money. get paid.
+Good news, everyone!
+
+{{ questioner.username }} has selected your answer on code4cheap.com! You can see it here:
+
+{{ url }}
+
+You will receive payment in less than 48 hours.
+
+Nice job!
+
+Blake Householder and the code4cheap.com team

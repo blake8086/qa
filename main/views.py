@@ -71,11 +71,10 @@ def ask(request):
 						'activateUrl': activateUrl,
 						'password': password,
 					})
-					sendTemplateEmail('Account created', email, 'questionerSignup', context)
+					sendTemplateEmail('Welcome to code4cheap.com', email, 'questionerSignup', context)
 				else:
 					email = questionForm.cleaned_data['email']
 					user = User.objects.filter(email = email)[0]
-					#todo: throw error if not found
 					user = authenticate(username = user.username, password = questionForm.cleaned_data['password'])
 			q = Question.objects.create(
 				text = questionForm.cleaned_data['text'],
@@ -210,9 +209,9 @@ def question(request, question_id):
 			context = Context({
 				'answerer': answer.user,
 				'questioner': question.user,
+				'url': 'http://' + SITE_DOMAIN + '/question/' + str(question.id)
 			})
-			sendTemplateEmail('Congratulations!', answer.user.email, 'answererAccepted', context)
-			sendTemplateEmail('Thanks for your question', question.user.email, 'questionerAccepted', context)
+			sendTemplateEmail('Your answer was selected!', answer.user.email, 'answererAccepted', context)
 		else:
 			answerForm = AnswerForm(user, request.POST)
 			if answerForm.is_valid():
@@ -229,14 +228,11 @@ def question(request, question_id):
 							'email': email,
 							'password': password,
 						})
-						sendTemplateEmail('Welcome to code4cheap', email, 'answererSignup', context)
-
-						#todo: this answer is unpublished initially
+						sendTemplateEmail('Welcome to code4cheap.com', email, 'answererSignup', context)
 						message = 'Answer saved! You will need to activate your account before your answer becomes public.'
 					else:
 						email = answerForm.cleaned_data['email']
 						user = User.objects.filter(email = email)[0]
-						#todo: throw error if not found
 						user = authenticate(username = user.username, password = answerForm.cleaned_data['password'])
 						login(request, user)
 				published = user.is_active
@@ -248,6 +244,10 @@ def question(request, question_id):
 				)
 				showForm = False
 				messages.success(request, message)
+				context = Context({
+					'url': 'http://' + SITE_DOMAIN + '/question/' + str(question.id),
+				})
+				sendTemplateEmail('Your question received an answer!', question.user.email, 'questionerAnswer', context)
 				#clear answer form
 				answerForm = AnswerForm(user, initial = {'newUser': 'True'})
 					
@@ -280,6 +280,10 @@ def questionEdit(request, question_id):
 			'is_q': is_q,
 			'question': question,
 		}, context_instance = RequestContext(request))
+
+def testEmail(request):
+	if request.user.is_superuser:
+		return render_to_response('testEmail.html', {}, context_instance = RequestContext(request))
 
 def thanks(request, question_id):
 	question = Question.objects.get(pk = question_id)
@@ -330,8 +334,9 @@ def thanks(request, question_id):
 			
 			context = Context({
 				'questioner': question.user,
+				'url': 'http://' + SITE_DOMAIN + '/question/' + str(question.id),
 			})
-			sendTemplateEmail('Thanks for your order', question.user.email, 'questionerThanks', RequestContext(request))
+			sendTemplateEmail('Question posted successfully!', question.user.email, 'questionerThanks', RequestContext(request))
 			
 			return HttpResponseRedirect('/question/' + str(question.id))
 	messages.error(request, 'A problem occurred when processing your payment, please try again.')
