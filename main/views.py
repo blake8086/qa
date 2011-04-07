@@ -281,6 +281,12 @@ def questionEdit(request, question_id):
 			'question': question,
 		}, context_instance = RequestContext(request))
 
+def questions(request):
+	questions = Question.objects.filter(published = True).annotate(public_answers = Sum('answer__published')).order_by('created').reverse()
+	return render_to_response('questions.html', {
+		'questions': questions
+	}, context_instance = RequestContext(request))
+
 def testEmail(request):
 	if request.user.is_superuser:
 		return render_to_response('testEmail.html', {}, context_instance = RequestContext(request))

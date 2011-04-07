@@ -3,12 +3,75 @@
 {% block title %}code4cheap{% endblock %}
 {% block content %}
 	<style>
+		div#splash {
+			background-color: white;
+			color: #666;
+			margin: 1em auto;
+			padding: 2em;
+			width: 970px;
+		}
+		#splash h1 {
+			color: orange;
+			font-size: 300%;
+			line-height: 1.25em;
+			text-shadow: 1px 1px gray;
+		}
+		#splash ol {  }
+		#splash li {
+			font-size: 200%;
+			line-height: 1.25em;
+			list-style-position: inside;
+			list-style-type: decimal;
+		}
+		a.learn {
+			background-image: url({{ MEDIA_URL }}images/learnMore.png);
+			display: block;
+			height: 47px;
+			margin: 2em auto 1em auto;
+			width: 161px;
+		}
+		a.ask {
+			background-image: url({{ MEDIA_URL }}images/askButton.png);
+			display: block;
+			height: 84px;
+			margin: 12px auto;
+			width: 417px;
+		}
+		a.ask:hover, a.learn:hover {
+			background-position: center bottom;
+		}
+		a.questions {
+			
+		}
+		div.leftColumn {
+			float: left;
+			padding-left: 1em;
+		}
+		div.rightColumn {
+			float: right;
+			padding-top: 8em;
+			text-align: center;
+		}
 	</style>
-	<script>
-	</script>
-	<ol>
-		<li>Ask a question with a bounty</li>
-		<li>Pick the best answer</li>
-		<li>Get your code</li>
-	</ol>
+	<div id="splash">
+		<h1>code4cheap is a marketplace that connects small projects with quick answers. Guaranteed.</h1>
+		<div class="leftColumn">
+			<p style="font-size: 200%; line-height: 1.25em; margin: 1.5em 0 0.5em 0;">How it works:</p>
+			<ol>
+				<li>Ask a question</li>
+				<li>Name your price</li>
+				<li>Choose an answer</li>
+				<li>Get your code!</li>
+			</ol>
+			<a href="/faq" class="learn"></a>
+		</div>
+		<div class="rightColumn">
+			<a href="/ask" class="ask"></a>
+			<p style="font-size: 200%; line-height: 1.25em;">
+				or earn some cash by 
+				<a href="/questions" class="questions">browsing questions</a>
+			</p>
+		</div>
+		<div style="clear: both;"></div>
+	</div>
 {% endblock %}
