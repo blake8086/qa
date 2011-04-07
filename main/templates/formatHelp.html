@@ -22,11 +22,12 @@
 	<p style="text-align:center;"><a href="http://daringfireball.net/projects/markdown/syntax">guide to markdown syntax</a></p>
 </div>
 <script>
-	$('span#formatCue').hover(function() {
+	$('span#formatCue, div#formatGuide').mouseover(function() {
 		$('div#formatGuide').css('top', ($('span#formatCue').position().top + 16) + 'px')
 		$('div#formatGuide').css('left', ($('span#formatCue').position().left + $('span#formatCue').width() - $('div#formatGuide').width()) + 'px')
 		$('div#formatGuide').show();
-	}, function() {
+	});
+	$('span#formatCue, div#formatGuide').mouseout(function() {
 		$('div#formatGuide').hide();
-	})
+	});
 </script>
