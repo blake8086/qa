@@ -118,19 +118,23 @@ def home(request):
 
 def loginView(request):
 	if request.method == 'POST':
-		user = User.objects.get(email = request.POST['email'])
-		user = authenticate(username = user.username, password = request.POST['password'])
+		user = None
+		if User.objects.filter(email = request.POST['email']).exists():
+			user = User.objects.get(email = request.POST['email'])
+		elif User.objects.filter(username = request.POST['email']).exists():
+			user = User.objects.get(username = request.POST['email'])
 		if user is not None:
-			if not user.is_active:
-				user.is_active = True
-				user.save()
-				Answer.objects.filter(user = user).update(published = True)
-				messages.success(request, 'Your account has been activated!')
-			login(request, user)
-			messages.success(request, 'Logged in as ' + user.username)
-			return HttpResponseRedirect('/')
-		else:
-			messages.error(request, 'Wrong email/password')
+			user = authenticate(username = user.username, password = request.POST['password'])
+			if user is not None:
+				if not user.is_active:
+					user.is_active = True
+					user.save()
+					Answer.objects.filter(user = user).update(published = True)
+					messages.success(request, 'Your account has been activated!')
+				login(request, user)
+				messages.success(request, 'Logged in as ' + user.username)
+				return HttpResponseRedirect('/')
+		messages.error(request, 'Wrong email/password')
 	#if possible, change to redirect to referring page
 	return HttpResponseRedirect('/')
 
