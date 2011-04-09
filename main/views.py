@@ -1,5 +1,4 @@
-import sys
-sys.path.append('/Library/Python/2.6/site-packages')
+from settings import *
 #sys.path.append('/home/blake8086/webapps/c4c_development/qa/boto')
 #sys.path.append('/home/blake8086/webapps/c4c_staging/qa/boto')
 #sys.path.append('/home/blake8086/webapps/c4c_production/qa/boto')
@@ -17,7 +16,6 @@ from django.template.loader import get_template
 from django.views.decorators.csrf import csrf_protect
 from qa.main.models import Answer, Question, UserProfile
 from qa.main.models import LogCallerToken, LogPaymentResponse, LogPipelineResponse, LogRecipientToken
-from settings import *
 from urllib import urlencode
 import hashlib
 
