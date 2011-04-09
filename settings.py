@@ -25,6 +25,7 @@ INSTALLED_APPS = (
 	'django.contrib.messages',
 	'django.contrib.admin',
 	'django.contrib.markup',
+	'qa.boto',
 	'qa.main',
 )
 
