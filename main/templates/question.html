@@ -132,7 +132,7 @@
 			{% else %}
 				<div class="body shadowBox">
 					{{question.text|markdown}}
-					{% if is_q %}
+					{% if is_q and not question.is_answered %}
 						<p><a href="/question/{{question.id}}/edit">edit your question</a></p>
 					{% endif %}
 				</div>
@@ -212,7 +212,7 @@
 					{% endif %}
 					<div style="clear: both;"></div>
 					{{answer.text|markdown}}<br>
-					{% if answer.user == user %}
+					{% if answer.user == user and not question.is_answered %}
 						{% if not answer.published %}
 							<i>This answer is not yet public, please activate your account to make it public.</i>
 						{% endif %}
