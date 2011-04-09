@@ -1,8 +1,8 @@
 import sys
 sys.path.append('/Library/Python/2.6/site-packages')
-sys.path.append('/home/blake8086/webapps/c4c_development/qa')
-sys.path.append('/home/blake8086/webapps/c4c_staging/qa')
-sys.path.append('/home/blake8086/webapps/c4c_production/qa')
+sys.path.append('/home/blake8086/webapps/c4c_development/qa/boto')
+sys.path.append('/home/blake8086/webapps/c4c_staging/qa/boto')
+sys.path.append('/home/blake8086/webapps/c4c_production/qa/boto')
 from qa.boto.fps.connection import FPSConnection
 from django import forms
 from django.contrib import messages
