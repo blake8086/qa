@@ -1,6 +1,3 @@
-#import sys
-#sys.path.append('/path/to/qa')
-
 ADMIN_MEDIA_PREFIX = '/media/'
 AMAZON_COBRAND = ''
 AMAZON_DOMAIN = 'fps.sandbox.amazonaws.com'

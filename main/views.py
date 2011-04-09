@@ -1,8 +1,5 @@
 from settings import *
-#sys.path.append('/home/blake8086/webapps/c4c_development/qa/boto')
-#sys.path.append('/home/blake8086/webapps/c4c_staging/qa/boto')
-#sys.path.append('/home/blake8086/webapps/c4c_production/qa/boto')
-from qa.boto.fps.connection import FPSConnection
+import boto
 from django import forms
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
