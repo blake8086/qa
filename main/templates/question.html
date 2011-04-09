@@ -78,13 +78,15 @@
 			font-size: 197%;
 			line-height: 1.25em;
 		}
-		button.winner {
+		.winner {
 			background-color: transparent;
 			background-image: url({{ MEDIA_URL }}images/winningButton.png);
 			border: 0 solid transparent;
-			cursor: pointer;
 			height: 80px;
 			width: 339px;
+		}
+		button.winner {
+			cursor: pointer;
 		}
 		button.winner:hover {
 			background-position: center bottom;
@@ -203,6 +205,9 @@
 								<button class="winner"></button>
 							</form>
 						</div>
+					{% endif %}
+					{% if answer.is_winner %}
+						<div class="winner" style="background-position: center bottom; float: right;"></div>
 					{% endif %}
 					<div style="clear: both;"></div>
 					{{answer.text|markdown}}<br>

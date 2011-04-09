@@ -29,6 +29,9 @@
 			width: 100%;
 			z-index: 1;
 		}
+		table.answered td.bounty {
+			opacity: 0.5;
+		}
 	</style>
 	<script>
 		$('table.questionBox').live('click', function() {
@@ -38,7 +41,7 @@
 	<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/questions.css" />
 	<a href="/ask" class="ask"></a>
 	{% for question in questions %}
-		<table class="questionBox" id="{{ question.id }}">
+		<table class="questionBox {{ question.is_answered|yesno:"answered," }}" id="{{ question.id }}">
 			<tr>
 				<td class="bounty">
 					<span class="currencySymbol">$</span><span class="c1">{{ question.price|floatformat:"-2" }}</span>
