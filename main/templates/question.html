@@ -125,6 +125,7 @@
 					<form method="POST">
 						{% csrf_token %}
 						<textarea name="text">{{question.text}}</textarea>
+						<p>&nbsp;</p>
 						<p><input type="submit" value="Save my changes"></p>
 					</form>
 				</div>
