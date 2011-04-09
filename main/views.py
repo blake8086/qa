@@ -346,7 +346,7 @@ def thanks(request, question_id):
 				'questioner': question.user,
 				'url': 'http://' + SITE_DOMAIN + '/question/' + str(question.id),
 			})
-			sendTemplateEmail('Question posted successfully!', question.user.email, 'questionerThanks', RequestContext(request))
+			sendTemplateEmail('Question posted successfully!', question.user.email, 'questionerThanks', context)
 			
 			return HttpResponseRedirect('/question/' + str(question.id))
 	messages.error(request, 'A problem occurred when processing your payment, please try again.')
