@@ -162,7 +162,7 @@ def profile(request):
 				profile.enableAnswerNotifications = False
 				profile.enablePickedNotifications = False				
 			profile.emailAlias = cleanData['emailAlias']
-			if cleanData['emailAlias'] == 'False':
+			if cleanData['emailAlias'] == 'False' and '@' not in cleanData['username']:
 				user.username = cleanData['username']
 				user.save()
 			else:
