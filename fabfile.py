@@ -12,6 +12,9 @@ def deploy(name):
 def development():
 	deploy('development')
 
+def dev_log():
+	run('tail -f /home/blake8086/logs/user/error_c4c_development.log')
+
 def staging():
 	deploy('staging')
 	
