@@ -1,4 +1,4 @@
-from settings import *
+from django.conf import settings
 import boto
 from django import forms
 from django.contrib import messages
