@@ -1,5 +1,6 @@
 from django.conf import settings
-import boto
+from settings import *
+from boto.fps.connection import FPSConnection
 from django import forms
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
