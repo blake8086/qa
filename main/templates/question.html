@@ -135,6 +135,8 @@
 					{% if is_q and not question.is_answered %}
 						<p><a href="/question/{{question.id}}/edit">edit your question</a></p>
 					{% endif %}
+					<div id="disqus_separator" style="background-color: gray; height: 1px; margin: 1em 0;"></div>
+					<div id="disqus_thread"></div>
 				</div>
 			{% endif %}
 			<div style="clear: both;"></div>
@@ -225,4 +227,17 @@
 			{% endif %}
 		{% endfor %}
 	</div>
+	<script type="text/javascript">
+		var disqus_shortname = 'code4cheap';
+		var disqus_identifier = '{{question.id}}';
+		var disqus_url = 'http://www.code4cheap.com/question/{{question.id}}';
+		var disqus_developer = 1;
+	    (function() {
+	        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+	        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+	        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	    })();
+	</script>
+	<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
 {% endblock %}
