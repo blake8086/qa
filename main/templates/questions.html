@@ -13,6 +13,14 @@
 		a.ask:hover {
 			background-position: center bottom;
 		}
+		a.navLink {
+			background-color: transparent;
+			border: 0 solid transparent;
+			color: inherit;
+			margin: 0;
+			padding: 0;
+			text-decoration: none;
+		}
 		div.questionText {
 			height: 6.75em;
 			max-width: 580px;
@@ -44,7 +52,9 @@
 		<table class="questionBox {{ question.is_answered|yesno:"answered," }}" id="{{ question.id }}">
 			<tr>
 				<td class="bounty">
-					<span class="currencySymbol">$</span><span class="c1">{{ question.price|floatformat:"-2" }}</span>
+					<a href="/question/{{question.id}}" class="navLink">
+						<span class="currencySymbol">$</span><span class="c1">{{ question.price|floatformat:"-2" }}</span>
+					</a>
 				</td>
 				<td class="body">
 					<div class="questionText">
